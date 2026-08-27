@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+src/*.html -text whitespace=cr-at-eol
+src/*.js -text whitespace=cr-at-eol
+src/cache.appcache text eol=lf
+*.bin binary
+*.ico binary
+*.png binary
