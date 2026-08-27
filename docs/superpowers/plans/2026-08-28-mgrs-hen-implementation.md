@@ -44,7 +44,7 @@
 - Consumes: pinned GitHub raw URLs under commit `56a5d7697234246b9739e6aaafb0c70adae66a57`.
 - Produces: a same-origin static runtime rooted at `src/index.html`.
 
-- [ ] **Step 1: Prove the runtime is absent**
+- [x] **Step 1: Prove the runtime is absent**
 
 Run:
 
@@ -56,7 +56,7 @@ if ($missing.Count -ne $required.Count) { throw 'Runtime unexpectedly exists bef
 
 Expected: exit 0 with every required path absent.
 
-- [ ] **Step 2: Acquire the pinned runtime**
+- [x] **Step 2: Acquire the pinned runtime**
 
 Download only the files listed above from:
 
@@ -66,11 +66,11 @@ https://raw.githubusercontent.com/lutfailham96/PS4-JB-WebKit/56a5d7697234246b973
 
 Use `Invoke-WebRequest -UseBasicParsing -OutFile` for binary-safe acquisition. Do not download `src/core.js?v=10`, `favicon.ico`, or the upstream logo because the query-named duplicate is unnecessary and MGRS-HEN will use a CSS monogram.
 
-- [ ] **Step 3: Remove only the experimental 11.52 alias**
+- [x] **Step 3: Remove only the experimental 11.52 alias**
 
 Apply a targeted textual patch that removes the `PS4["11.52"] = Object.assign(...)` block and its adjacent `// Hack` comment from `src/ps4_offsets.js`. Do not change any other offset or status string.
 
-- [ ] **Step 4: Verify the security-sensitive bytes**
+- [x] **Step 4: Verify the security-sensitive bytes**
 
 Run `Get-FileHash -Algorithm SHA256` and require these hashes:
 
@@ -91,7 +91,7 @@ payload.bin     c6329401d1810e16c84e6474ac30977dbdc951987c10cdb559370de7d59db0b0
 
 Expected: every comparison is true.
 
-- [ ] **Step 5: Commit the vendored baseline**
+- [x] **Step 5: Commit the vendored baseline**
 
 ```bash
 git add src
@@ -118,7 +118,7 @@ git commit -m "Vendor verified PS4 exploit runtime"
 - Consumes: the complete runtime from Task 1.
 - Produces: `tools/update-integrity.ps1` for deterministic manifest/ledger generation and `tools/verify-project.ps1` for a zero-exit validation gate.
 
-- [ ] **Step 1: Write the failing project verifier**
+- [x] **Step 1: Write the failing project verifier**
 
 Create `tools/verify-project.ps1` so it fails when `vercel.json`, `src/cache.appcache`, or `checksums.sha256` is missing; parses every non-section cache entry; asserts the corresponding file exists; recomputes `checksums.sha256`; asserts `ps4_offsets.js` has the seven allowed keys and no `11.52`; and asserts all three HTML pages say `MGRS-HEN` without `RAW GAME` or `CloudInfra`.
 
@@ -130,19 +130,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-project.ps1
 
 Expected: non-zero exit naming the first missing deployment artifact.
 
-- [ ] **Step 2: Brand the three HTML shells**
+- [x] **Step 2: Brand the three HTML shells**
 
 Replace the upstream brand image and label with a CSS-only `MH` monogram plus the text `MGRS-HEN`. Preserve the firmware detector, cache state machine, module imports, and chain routing exactly.
 
-- [ ] **Step 3: Implement deterministic integrity generation**
+- [x] **Step 3: Implement deterministic integrity generation**
 
 Create `tools/update-integrity.ps1` with no network calls. It must enumerate the explicit runtime list, compute lowercase SHA-256, write `checksums.sha256` in `<hash>  <relative-path>` format, derive a build identifier from the ordered ledger, and write `src/cache.appcache` with `CACHE MANIFEST`, the build line, explicit entries, `NETWORK: *`, and the three same-file fallback rules.
 
-- [ ] **Step 4: Add the Vercel static contract**
+- [x] **Step 4: Add the Vercel static contract**
 
 Create `vercel.json` with a `/src/$1` rewrite, a root route to `/src/index.html`, `Content-Type: text/cache-manifest` plus `Cache-Control: no-cache` for `/cache.appcache`, and immutable caching for fingerprint-controlled JS and binary assets. Add `.gitattributes` to keep binaries binary and text files normalized to LF. Add `.gitignore` for `.vercel/`, temporary logs, and editor files.
 
-- [ ] **Step 5: Generate artifacts and turn the verifier green**
+- [x] **Step 5: Generate artifacts and turn the verifier green**
 
 Run:
 
@@ -153,7 +153,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-project.ps1
 
 Expected: generation exits 0; verification reports every required asset and checksum valid with exit 0.
 
-- [ ] **Step 6: Commit the deployable shell**
+- [x] **Step 6: Commit the deployable shell**
 
 ```bash
 git add .gitattributes .gitignore checksums.sha256 src tools vercel.json
@@ -172,11 +172,11 @@ git commit -m "Add MGRS-HEN offline Vercel host"
 - Consumes: the deployable repository and verification commands from Tasks 1-2.
 - Produces: operator instructions and an evidence-backed final repository state.
 
-- [ ] **Step 1: Write operator documentation**
+- [x] **Step 1: Write operator documentation**
 
 Document direct Vercel import, optional GitHub push, local preview, integrity regeneration, firmware table, first-load/offline behavior, payload provenance hash, kernel-panic risk, and the boundary between desktop validation and physical-PS4 validation. Do not document `?bug=` forcing.
 
-- [ ] **Step 2: Run the static verification gate**
+- [x] **Step 2: Run the static verification gate**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/update-integrity.ps1
@@ -186,11 +186,11 @@ git diff --exit-code -- checksums.sha256 src/cache.appcache
 
 Expected: all commands exit 0 and regeneration produces no diff.
 
-- [ ] **Step 3: Run the local HTTP Manual QA Gate**
+- [x] **Step 3: Run the local HTTP Manual QA Gate**
 
 Start a local static server rooted at `src/`, request `/`, both run pages, all seven JavaScript files, all five patch blobs, `payload.bin`, and `cache.appcache`, and assert HTTP 200 plus expected byte lengths. Fetch `/` using representative PS4 user-agent strings for 11.00, 12.02, 12.50, 12.52, and 13.00 to prove the shell is deliverable; record that browser-side routing itself requires a PS4 WebKit runtime.
 
-- [ ] **Step 4: Inspect the final repository**
+- [x] **Step 4: Inspect the final repository**
 
 ```bash
 git diff --check
@@ -200,13 +200,13 @@ git log --oneline --decorate -5
 
 Expected: no whitespace errors; only the README and checked plan remain before the final documentation commit.
 
-- [ ] **Step 5: Commit documentation and checked plan**
+- [x] **Step 5: Commit documentation and checked plan**
 
 ```bash
 git add README.md docs/superpowers/plans/2026-08-28-mgrs-hen-implementation.md
 git commit -m "Document MGRS-HEN deployment and verification"
 ```
 
-- [ ] **Step 6: Re-run the final gate after the last commit**
+- [x] **Step 6: Re-run the final gate after the last commit**
 
 Run the verifier, local HTTP QA, `git diff --check`, and `git status --short` again. Expected: all validation exits 0 and the worktree is clean. Physical PS4 exploitation remains explicitly unverified until the user tests the deployed URL on owned hardware.
