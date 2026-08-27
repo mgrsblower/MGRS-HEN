@@ -1,0 +1,63 @@
+:root {
+  --surface-root: #0b0d10;
+  --surface-header: #0e1116;
+  --surface-log: #11151b;
+  --text-primary: #c8ced8;
+  --text-secondary: #8b95a3;
+  --text-tertiary: #5c6672;
+  --border-default: #1e2732;
+  --border-mark: #3b4a5d;
+  --status-success: #7fd0a0;
+  --status-warning: #d8c07f;
+  --status-error: #d08a7f;
+  --space-1: 4px;
+  --space-reference-6: 6px;
+  --space-2: 8px;
+  --space-reference-10: 10px;
+  --space-4: 16px;
+  --space-reference-18: 18px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--surface-root);
+  color: var(--text-primary);
+  font: 15px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+
+#brand {
+  padding: var(--space-2) var(--space-reference-10);
+  border-bottom: 1px solid var(--border-default);
+  background: var(--surface-header);
+  text-align: center;
+}
+
+#brand .mark {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: var(--space-2);
+  border: 1px solid var(--border-mark);
+  border-radius: 50%;
+  color: var(--status-success);
+  font: 700 10px/28px Consolas, monospace;
+  vertical-align: middle;
+}
+
+#brand b {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  vertical-align: middle;
+}
+
+#wrap {
+  padding: var(--space-4) var(--space-reference-18);
+}
+
+.ok { color: var(--status-success); }
+.bad { color: var(--status-error); }
+.warn { color: var(--status-warning); }

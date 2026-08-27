@@ -1,1 +1,6 @@
 .worktrees/
+.vercel/
+.impeccable/
+*.log
+.DS_Store
+Thumbs.db
