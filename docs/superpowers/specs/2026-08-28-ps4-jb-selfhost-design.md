@@ -1,4 +1,4 @@
-# PS4 JB Self-Host Design
+# MGRS-HEN Self-Host Design
 
 ## Goal
 
@@ -62,7 +62,7 @@ All JavaScript, firmware patches, imagery, and `payload.bin` are served from the
 
 ## Delivery
 
-The completed repository will be stored at `outputs/ps4-jb-selfhost` on this laptop. It will contain a local Git history and be ready for the user to create a remote repository or import directly into Vercel.
+The completed repository will be stored at `outputs/MGRS-HEN` on this laptop. It will contain a local Git history and be ready for the user to create a remote repository or import directly into Vercel.
 
 ## Safety and Maintenance
 
