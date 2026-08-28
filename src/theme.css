@@ -14,14 +14,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'VT323';
-  src: url('fonts/VT323-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --mgrs-bg: #050805;
   --mgrs-bg-deep: #020402;
@@ -34,7 +26,7 @@
   --mgrs-red: #ff4e5b;
   --mgrs-yellow: #ffbd2e;
   
-  --font-mono: 'JetBrains Mono', 'VT323', Consolas, "Courier New", monospace;
+  --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
   
   --status-success: var(--mgrs-green);
   --status-warning: var(--mgrs-yellow);
@@ -58,6 +50,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
   overflow: hidden;
+  cursor: crosshair;
 }
 
 body {
@@ -67,25 +60,47 @@ body {
   position: relative;
 }
 
-/* ============================================================
-   CRT OVERLAYS & MATRIX RAIN CANVAS
-   ============================================================ */
-
-#matrix-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  opacity: 0.35;
-  pointer-events: none;
+::selection {
+  background: var(--mgrs-green);
+  color: var(--mgrs-bg-deep);
 }
+
+/* ============================================================
+   CRT OVERLAYS & BACKGROUND HEX GRID
+   ============================================================ */
 
 .crt-root {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 50;
+  mix-blend-mode: screen;
+}
+
+.crt-hex {
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--mgrs-green);
+  opacity: 0.13;
+  overflow: hidden;
+  user-select: none;
+  padding: 20px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.crt-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(56, 255, 156, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 255, 156, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.6;
 }
 
 .crt-scanlines {
@@ -99,6 +114,7 @@ body {
     rgba(0, 0, 0, 0) 4px
   );
   opacity: 0.55;
+  mix-blend-mode: multiply;
 }
 
 .crt-sweep {
@@ -109,9 +125,9 @@ body {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(56, 255, 156, 0.04) 40%,
-    rgba(56, 255, 156, 0.16) 50%,
-    rgba(56, 255, 156, 0.04) 60%,
+    rgba(56, 255, 156, 0.05) 40%,
+    rgba(56, 255, 156, 0.18) 50%,
+    rgba(56, 255, 156, 0.05) 60%,
     transparent 100%
   );
   animation: crt-sweep 8s linear infinite;
@@ -128,10 +144,24 @@ body {
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    transparent 50%,
+    transparent 45%,
     rgba(0, 0, 0, 0.55) 90%,
-    rgba(0, 0, 0, 0.9) 100%
+    rgba(0, 0, 0, 0.85) 100%
   );
+  mix-blend-mode: multiply;
+}
+
+.crt-flicker {
+  position: absolute;
+  inset: 0;
+  background: rgba(56, 255, 156, 0.015);
+  opacity: 0;
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.35; }
 }
 
 /* ============================================================
@@ -146,7 +176,7 @@ body {
   text-transform: uppercase;
   z-index: 20;
   user-select: none;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .landing-corner.tl {
@@ -190,7 +220,7 @@ body {
 }
 
 /* ============================================================
-   LANDING HERO SCREEN
+   STAGE 1: LANDING HERO VIEW
    ============================================================ */
 
 .landing-container {
@@ -200,10 +230,11 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 22px;
   text-align: center;
   max-width: 760px;
   padding: 30px 20px;
+  transition: opacity 0.35s ease, filter 0.35s ease;
 }
 
 .landing-tag {
@@ -214,27 +245,67 @@ body {
 }
 
 .landing-title {
-  font-size: 54px;
+  font-size: clamp(2.4rem, 6.5vw, 4.4rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   color: var(--mgrs-white);
-  text-shadow: 0 0 20px var(--mgrs-green-glow), 0 0 40px rgba(56, 255, 156, 0.3);
+  text-shadow: 0 0 24px var(--mgrs-green-glow), 0 0 48px rgba(56, 255, 156, 0.25);
   margin: 0;
   position: relative;
+  user-select: none;
 }
 
 .landing-title .brace {
   color: var(--mgrs-green);
-  opacity: 0.8;
+  opacity: 0.85;
   margin: 0 4px;
+}
+
+/* Glitch animation layers */
+.landing-title::before, .landing-title::after {
+  content: attr(data-glitch);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+}
+
+.landing-title::before {
+  left: -2px;
+  text-shadow: 2px 0 var(--mgrs-red);
+  animation: glitch-anim-1 3.5s infinite linear alternate-reverse;
+}
+
+.landing-title::after {
+  left: 2px;
+  text-shadow: -2px 0 var(--mgrs-green);
+  animation: glitch-anim-2 2.8s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip: rect(20px, 9999px, 35px, 0); transform: skew(0.3deg); }
+  10% { clip: rect(65px, 9999px, 80px, 0); transform: skew(0.6deg); }
+  20% { clip: rect(10px, 9999px, 25px, 0); transform: skew(0.1deg); }
+  30% { clip: rect(0, 0, 0, 0); }
+  100% { clip: rect(0, 0, 0, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(0, 0, 0, 0); }
+  70% { clip: rect(0, 0, 0, 0); }
+  80% { clip: rect(40px, 9999px, 60px, 0); transform: skew(-0.4deg); }
+  90% { clip: rect(15px, 9999px, 30px, 0); transform: skew(-0.2deg); }
+  100% { clip: rect(75px, 9999px, 95px, 0); transform: skew(-0.5deg); }
 }
 
 .landing-subtitle {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
-  letter-spacing: 0.2em;
+  font-size: 13.5px;
+  letter-spacing: 0.22em;
   color: var(--mgrs-green);
   text-transform: uppercase;
 }
@@ -259,20 +330,20 @@ body {
   51%, 100% { opacity: 0; }
 }
 
-/* Status Block (Preserves #state, #det, #cache) */
+/* Status Card */
 .status-card {
   width: 100%;
   max-width: 580px;
-  background: rgba(14, 90, 53, 0.15);
-  border: 1px solid rgba(56, 255, 156, 0.25);
+  background: rgba(14, 90, 53, 0.18);
+  border: 1px solid rgba(56, 255, 156, 0.28);
   border-radius: 6px;
   padding: 14px 20px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   text-align: center;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(56, 255, 156, 0.05);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.85), inset 0 0 15px rgba(56, 255, 156, 0.06);
 }
 
 .status-label {
@@ -320,7 +391,7 @@ body {
   background: rgba(5, 8, 5, 0.85);
   color: var(--mgrs-white);
   border: 1px solid var(--mgrs-green);
-  padding: 12px 36px;
+  padding: 12px 40px;
   font-family: var(--font-mono);
   font-size: 16px;
   font-weight: 700;
@@ -328,7 +399,7 @@ body {
   cursor: pointer;
   border-radius: 4px;
   outline: none;
-  box-shadow: 0 0 15px rgba(56, 255, 156, 0.25), inset 0 0 10px rgba(56, 255, 156, 0.12);
+  box-shadow: 0 0 16px rgba(56, 255, 156, 0.3), inset 0 0 10px rgba(56, 255, 156, 0.15);
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -339,7 +410,7 @@ body {
 .landing-cta:hover, .landing-cta:focus {
   background: var(--mgrs-green);
   color: var(--mgrs-bg-deep);
-  box-shadow: 0 0 30px var(--mgrs-green-glow), inset 0 0 15px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 35px var(--mgrs-green-glow), inset 0 0 15px rgba(255, 255, 255, 0.6);
   transform: translateY(-1px);
 }
 
@@ -355,7 +426,6 @@ body {
   color: var(--mgrs-bg-deep);
 }
 
-/* Bottom Telemetry Bar */
 .landing-telemetry {
   display: flex;
   gap: 20px;
@@ -366,16 +436,72 @@ body {
 }
 
 /* ============================================================
-   TERMINAL EXECUTION SCREEN (run_lapse.html / run_poops.html)
+   STAGE 1.5: GLITCH BREACH TRANSITION VIEW
+   ============================================================ */
+
+.transition-root {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--mgrs-bg);
+  gap: 16px;
+}
+
+.transition-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--mgrs-white);
+  text-shadow: 0 0 12px var(--mgrs-green-glow);
+  animation: glitch-text 0.15s infinite;
+}
+
+@keyframes glitch-text {
+  0% { transform: translate(0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+.transition-progress-box {
+  width: 320px;
+  height: 6px;
+  background: rgba(14, 90, 53, 0.3);
+  border: 1px solid rgba(56, 255, 156, 0.4);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.transition-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--mgrs-green);
+  box-shadow: 0 0 10px var(--mgrs-green-glow);
+  transition: width 0.1s linear;
+}
+
+.transition-log {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--mgrs-green);
+}
+
+/* ============================================================
+   STAGE 2: TERMINAL EXECUTION VIEW
    ============================================================ */
 
 .terminal-root {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 860px;
+  max-width: 880px;
   height: 90vh;
-  max-height: 640px;
+  max-height: 660px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -384,19 +510,19 @@ body {
 .terminal-window {
   width: 100%;
   height: 100%;
-  background: rgba(5, 8, 5, 0.94);
+  background: rgba(5, 8, 5, 0.95);
   border: 1px solid rgba(56, 255, 156, 0.35);
   border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(56, 255, 156, 0.15);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(56, 255, 156, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .terminal-header {
-  background: rgba(14, 90, 53, 0.2);
+  background: rgba(14, 90, 53, 0.22);
   border-bottom: 1px solid rgba(56, 255, 156, 0.25);
-  padding: 10px 16px;
+  padding: 10px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -422,7 +548,7 @@ body {
 .terminal-body {
   flex: 1;
   min-height: 0;
-  padding: 16px 20px;
+  padding: 18px 22px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -450,14 +576,14 @@ body {
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  padding: 14px;
-  background: rgba(2, 4, 2, 0.85);
-  border: 1px solid rgba(56, 255, 156, 0.2);
+  padding: 14px 16px;
+  background: rgba(2, 4, 2, 0.9);
+  border: 1px solid rgba(56, 255, 156, 0.22);
   border-radius: 4px;
   color: var(--mgrs-green);
   font-family: var(--font-mono);
   font-size: 12.5px;
-  line-height: 1.5;
+  line-height: 1.55;
   scrollbar-width: thin;
   scrollbar-color: var(--mgrs-green-soft) transparent;
 }
@@ -472,9 +598,9 @@ body {
 }
 
 .terminal-footer {
-  background: rgba(2, 4, 2, 0.95);
+  background: rgba(2, 4, 2, 0.96);
   border-top: 1px solid rgba(56, 255, 156, 0.2);
-  padding: 8px 16px;
+  padding: 8px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -498,38 +624,19 @@ body {
    ============================================================ */
 
 @media (max-width: 768px) {
-  .landing-title {
-    font-size: 38px;
-  }
-  .landing-corner {
-    font-size: 9.5px;
-  }
+  .landing-title { font-size: 36px; }
+  .landing-corner { font-size: 9.5px; }
   .landing-corner.tl { top: 14px; left: 14px; }
   .landing-corner.tr { top: 14px; right: 14px; }
   .landing-corner.bl { bottom: 14px; left: 14px; }
   .landing-corner.br { bottom: 14px; right: 14px; }
-  .landing-telemetry {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-  .terminal-root {
-    padding: 8px;
-    height: 96vh;
-  }
+  .landing-telemetry { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .terminal-root { padding: 8px; height: 96vh; }
 }
 
 @media (max-width: 375px) {
-  .landing-title {
-    font-size: 28px;
-  }
-  .landing-subtitle {
-    font-size: 11px;
-  }
-  .landing-corner {
-    display: none;
-  }
-  #state {
-    font-size: 14px;
-  }
+  .landing-title { font-size: 26px; }
+  .landing-subtitle { font-size: 11px; }
+  .landing-corner { display: none; }
+  #state { font-size: 14px; }
 }

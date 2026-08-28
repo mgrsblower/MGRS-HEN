@@ -8,13 +8,21 @@
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-<canvas id="matrix-canvas"></canvas>
 
-<!-- CRT Visual Overlays -->
+<!-- CRT Visual Overlays & Hex Dump Memory Background -->
 <div class="crt-root" aria-hidden="true">
+  <pre class="crt-hex">0x0A3F12  4F2A 9C1B 0084 7FEA 1290 FF4C B801 3E29  ░▒▓█▄▀▐▌╔╗╚╝
+0x1B8240  89AC 012F 774B EE10 9940 33BC 4501 88FA  アカサタナハマヤ
+0x2C4091  439B 2210 00FA 7780 1209 883A 9920 441B  ║═┼┴┬┤├░▒▓█
+0x3D9102  FA01 339C 8820 119A 448B 9910 223A 77BC  ラワイキシチニヒ
+0x4E1823  0094 883B 2210 994C 33BA 7710 4480 119A  ミリギジヂビピウ
+0x5F2934  8820 449B 110A 773C 9940 22BC 3310 88FA  クスツヌフムユル
+0x6A3845  119A 774B 8820 4410 229B 993C 0084 33BA  グズヅブプ░▒▓█</pre>
+  <div class="crt-grid"></div>
   <div class="crt-scanlines"></div>
   <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
+  <div class="crt-flicker"></div>
 </div>
 
 <main id="wrap" class="terminal-root">
@@ -57,38 +65,6 @@
 </main>
 
 <script>
-// Matrix Background Canvas
-(function() {
-  var c = document.getElementById("matrix-canvas");
-  if (!c) return;
-  var ctx = c.getContext("2d");
-  var w, h, cols, drops;
-  var chars = "0123456789ABCDEF+=-:.*#@+WXZabcdefghijklmnopqrstuvwxyz";
-  function init() {
-    w = c.width = window.innerWidth;
-    h = c.height = window.innerHeight;
-    cols = Math.floor(w / 14);
-    drops = Array(cols).fill(1);
-  }
-  function draw() {
-    ctx.fillStyle = "rgba(5, 8, 5, 0.08)";
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#38ff9c";
-    ctx.font = '12px "JetBrains Mono", monospace';
-    for (var i = 0; i < drops.length; i++) {
-      var text = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(text, i * 14, drops[i] * 14);
-      if (drops[i] * 14 > h && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-  window.addEventListener("resize", init);
-  init();
-  setInterval(draw, 35);
-})();
-
 // Terminal Clock
 (function() {
   var clockEl = document.getElementById("term-clock");
