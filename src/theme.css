@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-primary: #00ff66;
   --color-secondary: #00b347;
@@ -19,7 +35,7 @@
   --status-warning: #ffbd2e;
   --status-error: #ff5f56;
   
-  --font-mono: Consolas, "Courier New", monospace;
+  --font-mono: 'JetBrains Mono', Consolas, "Courier New", monospace;
   
   --space-1: 4px;
   --space-2: 8px;
@@ -220,25 +236,6 @@ body {
   color: var(--color-secondary);
   font-size: 12px;
   opacity: 0.85;
-}
-
-/* Prompt Line Indicator */
-.prompt-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-primary);
-  padding-top: 4px;
-}
-
-.prompt-cursor {
-  width: 8px;
-  height: 15px;
-  background-color: var(--color-primary);
-  box-shadow: 0 0 6px var(--color-glow);
-  display: inline-block;
 }
 
 /* Chain Log Shell (#out) */
