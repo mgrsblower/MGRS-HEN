@@ -80,16 +80,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Static CRT / Matrix Texture (Pure CSS, no JS/timer) */
+/* Authentic Hacker ASCII Matrix Texture Background (Pure Static CSS) */
 .crt-texture {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.18;
+  opacity: 0.26;
   background-image: 
-    repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 255, 102, 0.15) 3px),
-    repeating-linear-gradient(90deg, transparent 0, transparent 7px, rgba(0, 255, 102, 0.05) 8px);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='260' viewBox='0 0 520 260'%3E%3Cstyle%3Etext%7Bfont-family:monospace;font-size:10.5px;fill:%2300ff66;letter-spacing:1px;font-weight:bold;%7D%3C/style%3E%3Ctext x='0' y='14'%3E+abcXWW%2300XWa:++aaaa+++ +cWW%2300b= =b0%23Wa +ba+c%%a a%23c+b..+@b=bb. +0-b+W=a ..; b_c=.aa.+.. ab:c%23b=cb.. =Xc++%23@Wa:acb:%3C/text%3E%3Ctext x='0' y='32'%3E=abXWW0000XWcba+++++ +a%23b++++ =b0WWa.. b%%b+a0- %23WWa+.. :@W: + .. Wc+cX.. +b+@n+@=WX ac .+; XW+0b+.. bb==X%230a:+bXb .:+%3C/text%3E%3Ctext x='0' y='50'%3E +acXWW0000XWcba+ +a%23%23ba++ +acXWW0 =b0WWa =aa+acWX+ :aX%23+:.. +X%23+. +@W=a.. +%23b+b%23+b%23+C+0W WW bb. _Xa=0W: a +a+C%23Wa=aXXa%3C/text%3E%3Ctext x='0' y='68'%3E +bcWW000000%230cb; =bXXXX+ +cWW00c =b0WWa +cba++acb- -=W%23X:; .:=@=W- ++W-a.. aW=c%23a+W+ X+ Xb=@X:c+ a_a%23b=ca.. b0Wa=bWWa%3C/text%3E%3Ctext x='0' y='86'%3E +abXWW000000XW0+ +aXXXX+ +a0WXXa =aX0XXa :bXXC+:+a a0%23b =aa+Xc Wc-aa. b0a+c a:a+b%23+i+X:a. +; :ca+%23c=X. _cW+cW +WX+i+C=0a=%3C/text%3E%3Ctext x='0' y='104'%3E +acXWW000000XW0+ +a%23XXXX+ +a%23XXXXa =b0X0a: :bW0Xa=.. +a00_ :cc+b= .a%23b.. :@+aaW:+ +..=...+..._W+b%23+ ;c=a ca%23b.+. Xc+=%23W+W+ +b+%3C/text%3E%3Ctext x='0' y='122'%3E +bcXWW000000XW0==bXXXXX+ +cWW00c +a%23XXXXa +W%230b- ::+bWX; a%23%25X+: .a%23+c. a+0+c. a=a%23a a= :ba X+C..+.at+ a+cW=c == W0==a b0Wa=bWWa%3C/text%3E%3Ctext x='0' y='140'%3E =abXWW000000XW0+ +a%23XXXX+ +a0WXXa +b0XXXX= +%23X%23+C aba=acb X%23a_ ++cX..a+:: WcX===: ;bx+@W+0X+a+iX. baa%23-- a+;c=@X: a +00=bcb .:+%3C/text%3E%3Ctext x='0' y='158'%3E +bcXWW000000%230cb;+a%23XXXX+ +b0XXXXa =b0XXXX+ +c0W0b- :bW0X= =c0X_ ..=a:= ..W=0@%23+c+:c+@ b_bb+Wb..+ +@b0=aXX+ ;X+ +aa+%3C/text%3E%3Ctext x='0' y='176'%3E +acXWW000000XW0+ +aXXXX+ +cWW00c +c0XXXXX+ +a0WXXa =aa+acWX+ :=@=W- ++W-a.. .@bbXX+:c+; a a= :ba X+C..+.at+ a+cW=c == ::%3C/text%3E%3Ctext x='0' y='194'%3E +bcXWW000000XW0==bXXXXX+ +a0WXXa +b0XXXXX+ +b0XXXX= :bXXC+:+a a0%23b =aa+Xc Wc-aa. b0a+c a:a+b%23+i+X:a. +; :ca+%23c=X. :;%3C/text%3E%3Ctext x='0' y='212'%3E =abXWW000000XW0+ +a%23XXXX+ +a%23XXXXa +cWW00c =b0XXXX+ :bW0Xa=.. +a00_ :cc+b= .a%23b.. :@+aaW:+ +..=...+..._W+b%23+ ;c=a ca%23b ++%3C/text%3E%3Ctext x='0' y='230'%3E +bcXWW000000%230cb;+a%23XXXX+ +cWW00c +a0WXXa +c0XXXXX+ +%23X%23+C aba=acb X%23a_ ++cX..a+:: WcX===: ;bx+@W+0X+a+iX. baa%23-- ::%3C/text%3E%3Ctext x='0' y='248'%3E+abcXWW%2300XWa:++aaaa+++ +cWW%2300b= =b0%23Wa +ba+c%%a a%23c+b..+@b=bb. +0-b+W=a ..; b_c=.aa.+.. ab:c%23b=cb.. =Xc++%23@Wa:acb:%3C/text%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.4) 3px);
+  background-repeat: repeat;
 }
 
 /* Centered Floating Terminal Window */
