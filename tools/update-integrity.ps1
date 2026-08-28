@@ -9,6 +9,7 @@ $assets = @(
     'run_lapse.html'
     'run_poops.html'
     'theme.css'
+    'fonts/VT323-Regular.ttf'
     'fonts/JetBrainsMono-Regular.ttf'
     'fonts/JetBrainsMono-Bold.ttf'
     'chain_lapse.js'
