@@ -4,3 +4,7 @@
 *.log
 .DS_Store
 Thumbs.db
+Referensi/
+app.js
+index.html
+style.css
