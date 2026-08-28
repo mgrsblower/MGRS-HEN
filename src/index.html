@@ -32,21 +32,21 @@
 <!-- 4-Corner Tactical HUD -->
 <div class="landing-corner tl" aria-hidden="true">
   <span class="dot"></span>
-  <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
+  NODE // 07-A &middot; SECTOR-&Delta;
 </div>
 <div class="landing-corner tr" id="hud-clock" aria-hidden="true">
-  <span>UTC TIME &middot; SYNCING...</span><br>
-  <span>UPLINK &middot; SECURE</span>
+  2026-08-28 07:04:48 UTC<br>
+  UPLINK &middot; SECURE
 </div>
 <div class="landing-corner bl" aria-hidden="true">
-  <span>v1.0.0 &middot; BUILD 20260210</span>
+  V1.0.0 &middot; BUILD 20260210
 </div>
 <div class="landing-corner br" aria-hidden="true">
-  <span>LAT 0.000 &middot; LON 0.000</span><br>
-  <span>CIPHER &middot; AES-256/GCM</span>
+  LAT 0.000 &middot; LON 0.000<br>
+  CIPHER &middot; AES-256/<span style="color: #38b8ff">GCM</span>
 </div>
 
-<!-- Stage 1: Landing Hero Screen -->
+<!-- Stage 1: Landing Hero Screen (Matches Hacker UI 1:1) -->
 <main id="wrap" class="landing">
   <div class="landing-tag" aria-hidden="true">&gt;&nbsp; ENCRYPTED CHANNEL &nbsp;&middot;&nbsp; ACCESS RESTRICTED</div>
   
@@ -59,13 +59,6 @@
     <span class="divider">//</span>
     <span>READY<span class="blink">_</span></span>
   </div>
-  
-  <div class="status-card" aria-label="Firmware and Cache Status">
-    <div class="status-label">SYSTEM TELEMETRY //</div>
-    <div id="state">detecting firmware...</div>
-    <div id="det" class="diagnostic-line"></div>
-    <div id="cache" class="cache-line"></div>
-  </div>
 
   <button id="start-btn" class="landing-cta" aria-label="Start MGRS-HEN System">
     <span class="bracket">[</span>&gt;&nbsp;START<span class="bracket">]</span>
@@ -76,6 +69,13 @@
     <span>NET &middot; 0.8 ms</span>
     <span>MEM &middot; 42%</span>
     <span>THREATS &middot; 0</span>
+  </div>
+
+  <!-- Runtime detector DOM hooks -->
+  <div style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;">
+    <div id="state">detecting firmware...</div>
+    <div id="det"></div>
+    <div id="cache"></div>
   </div>
 </main>
 
@@ -92,7 +92,7 @@
   function updateClock() {
     var now = new Date();
     var utc = now.toISOString().replace("T", " ").slice(0, 19) + " UTC";
-    clockEl.innerHTML = "<span>" + utc + "</span><br><span>UPLINK &middot; SECURE</span>";
+    clockEl.innerHTML = utc + "<br>UPLINK &middot; SECURE";
   }
   updateClock();
   setInterval(updateClock, 1000);
