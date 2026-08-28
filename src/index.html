@@ -9,10 +9,7 @@
 </head>
 <body>
 
-<!-- Background Matrix Rain Drop Canvas -->
-<canvas id="matrix-canvas"></canvas>
-
-<!-- CRT Grid & Vignette (Clean: Scanline & Sweep Removed) -->
+<!-- Lightweight Background: CRT Grid & Vignette (No heavy canvas animation) -->
 <div class="crt-root" aria-hidden="true">
   <div class="crt-grid"></div>
   <div class="crt-vignette"></div>
@@ -113,44 +110,6 @@ function updateClocks() {
 }
 updateClocks();
 setInterval(updateClocks, 1000);
-
-// Matrix Background Animation
-var canvas = document.getElementById('matrix-canvas');
-if (canvas) {
-    var ctx = canvas.getContext('2d');
-    var width, height, columns, drops;
-    var chars = '0123456789ABCDEF+=-:.*#@+WXZabcdefghijklmnopqrstuvwxyz';
-
-    function initMatrix() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        var fontSize = 14;
-        columns = Math.floor(width / fontSize);
-        drops = Array(columns).fill(1);
-    }
-
-    function drawMatrix() {
-        ctx.fillStyle = 'rgba(5, 8, 5, 0.08)';
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.fillStyle = '#38ff9c';
-        ctx.font = '12px "JetBrains Mono", monospace';
-
-        for (var i = 0; i < drops.length; i++) {
-            var text = chars[Math.floor(Math.random() * chars.length)];
-            ctx.fillText(text, i * 14, drops[i] * 14);
-
-            if (drops[i] * 14 > height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
-        }
-    }
-
-    window.addEventListener('resize', initMatrix);
-    initMatrix();
-    setInterval(drawMatrix, 35);
-}
 </script>
 
 <script>
