@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<!-- CRT Visual Overlays & Hex Dump Memory Background -->
+<!-- CRT Visual Overlays, Hex Dump Memory Background & Film Grain Noise -->
 <div class="crt-root" aria-hidden="true">
   <pre class="crt-hex">0x0A3F12  4F2A 9C1B 0084 7FEA 1290 FF4C B801 3E29  ░▒▓█▄▀▐▌╔╗╚╝
 0x1B8240  89AC 012F 774B EE10 9940 33BC 4501 88FA  アカサタナハマヤ
@@ -22,38 +22,38 @@
   <div class="crt-scanlines"></div>
   <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
+  <div class="crt-noise"></div>
   <div class="crt-flicker"></div>
 </div>
 
-<main id="wrap" class="terminal-root">
+<main id="wrap" class="terminal-root" style="display: flex;">
   <div class="terminal-window">
     <header id="brand" class="terminal-header">
       <div class="title">
-        <span class="dot-indicator"></span>
+        <span class="dot"></span>
         <span>&boxdr;&nbsp;MGRS-HEN TERMINAL</span>
       </div>
       <div class="meta" aria-hidden="true">
-        <span>TTY &middot; pts/0</span>
+        <span>TTY &middot; PTS/0</span>
         <span>ENC &middot; AES-256</span>
         <span id="term-clock">UTC TIME</span>
       </div>
     </header>
 
     <div class="terminal-body">
-      <div class="chain-info">
-        <div class="chain-heading">MGRS-HEN SYSTEM // POOPS EXPLOIT CHAIN</div>
-        <div>Secure Kernel Payload Injector &middot; FW 12.50 - 13.00</div>
-        <div id="state">loading poops chain...</div>
-      </div>
+      <div class="term-line term-heading">MGRS-HEN SYSTEM // POOPS EXPLOIT CHAIN</div>
+      <div class="term-line dim">Secure Kernel Payload Injector &middot; FW 12.50 - 13.00</div>
+      <div id="state" class="term-line warn">loading poops chain...</div>
+      <div class="term-line blank"></div>
 
       <div id="out" aria-label="Poops chain output"></div>
     </div>
 
     <footer class="terminal-footer">
       <div class="left">
-        <span class="online-dot">&bull;&nbsp;ONLINE</span>
+        <span>&bull;&nbsp;ONLINE</span>
         <span>SESSION &middot; #A7F3</span>
-        <span>USER &middot; root</span>
+        <span>USER &middot; ROOT</span>
       </div>
       <div class="right">
         <span>FW 12.50-13.00</span>

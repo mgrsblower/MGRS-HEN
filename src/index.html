@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<!-- CRT Visual Overlays & Hex Dump Memory Background -->
+<!-- CRT Visual Overlays, Hex Dump Memory Background & Film Grain Noise -->
 <div class="crt-root" aria-hidden="true">
   <pre class="crt-hex" id="crt-hex-bg">0x0A3F12  4F2A 9C1B 0084 7FEA 1290 FF4C B801 3E29  ░▒▓█▄▀▐▌╔╗╚╝
 0x1B8240  89AC 012F 774B EE10 9940 33BC 4501 88FA  アカサタナハマヤ
@@ -25,12 +25,13 @@
   <div class="crt-scanlines"></div>
   <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
+  <div class="crt-noise"></div>
   <div class="crt-flicker"></div>
 </div>
 
 <!-- 4-Corner Tactical HUD -->
 <div class="landing-corner tl" aria-hidden="true">
-  <span class="dot-indicator"></span>
+  <span class="dot"></span>
   <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
 </div>
 <div class="landing-corner tr" id="hud-clock" aria-hidden="true">
@@ -46,7 +47,7 @@
 </div>
 
 <!-- Stage 1: Landing Hero Screen -->
-<main id="wrap" class="landing-container">
+<main id="wrap" class="landing">
   <div class="landing-tag" aria-hidden="true">&gt;&nbsp; ENCRYPTED CHANNEL &nbsp;&middot;&nbsp; ACCESS RESTRICTED</div>
   
   <h1 id="brand" class="landing-title" data-glitch="[MGRS-HEN]">
@@ -56,7 +57,7 @@
   <div class="landing-subtitle" aria-hidden="true">
     <span>SYSTEM INTERFACE</span>
     <span class="divider">//</span>
-    <span>READY<span class="blink-cursor"></span></span>
+    <span>READY<span class="blink">_</span></span>
   </div>
   
   <div class="status-card" aria-label="Firmware and Cache Status">
@@ -70,7 +71,7 @@
     <span class="bracket">[</span>&gt;&nbsp;START<span class="bracket">]</span>
   </button>
 
-  <div class="landing-telemetry" aria-hidden="true">
+  <div class="landing-status" aria-hidden="true">
     <span>KERNEL &middot; IDLE</span>
     <span>NET &middot; 0.8 ms</span>
     <span>MEM &middot; 42%</span>
@@ -78,13 +79,9 @@
   </div>
 </main>
 
-<!-- Stage 1.5: Glitch Breach Transition View -->
+<!-- Stage 2: Hacker Transition -->
 <div id="transition-view" class="transition-root" aria-hidden="true">
-  <div class="transition-title">BREACHING KERNEL...</div>
-  <div class="transition-progress-box">
-    <div id="transition-bar" class="transition-progress-fill"></div>
-  </div>
-  <div class="transition-log" id="transition-text">INITIALIZING MEMORY PRIMITIVES...</div>
+  <div class="transition-logs" id="transition-logs"></div>
 </div>
 
 <script>
@@ -110,8 +107,7 @@
     var startBtn = document.getElementById("start-btn");
     var wrapEl = document.getElementById("wrap");
     var transitionView = document.getElementById("transition-view");
-    var transitionBar = document.getElementById("transition-bar");
-    var transitionText = document.getElementById("transition-text");
+    var transitionLogs = document.getElementById("transition-logs");
 
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
@@ -148,26 +144,43 @@
         + location.search;
 
     var launched = false;
+    var TRANS_LOGS = [
+        { text: "BREACHING KERNEL MEMORY...", delay: 140, status: "OK" },
+        { text: "CORRUPTING JSARRAY BUFFER (CVE-2024-X)...", delay: 180, status: "OK" },
+        { text: "MAPPING RWX HEAP AT 0x00007FFFFFE00000...", delay: 240, status: "DONE" },
+        { text: "DISABLING KERNEL WRITE PROTECTION (CR0)...", delay: 200, status: "OK" },
+        { text: "INJECTING KERNEL PAYLOAD (payload.bin)...", delay: 260, status: "LOADED" },
+        { text: "ESTABLISHING RPC ROOT SHELL...", delay: 180, status: "ESTABLISHED" }
+    ];
+
     function go() { 
         if (launched) return;
         launched = true;
         
-        // Show Cyber Breach Transition
         if (wrapEl) {
             wrapEl.style.opacity = "0";
             wrapEl.style.filter = "blur(8px)";
+            wrapEl.style.transition = "opacity 0.4s ease, filter 0.4s ease";
         }
-        if (transitionView) {
+        if (transitionView && transitionLogs) {
             transitionView.style.display = "flex";
-            var pct = 0;
-            var tid = setInterval(function() {
-                pct += 20;
-                if (transitionBar) transitionBar.style.width = pct + "%";
-                if (pct >= 100) {
-                    clearInterval(tid);
-                    location.replace(target);
+            var idx = 0;
+            function printT() {
+                if (idx < TRANS_LOGS.length) {
+                    var l = TRANS_LOGS[idx];
+                    var div = document.createElement("div");
+                    div.className = "transition-log-line";
+                    div.innerHTML = "<span>&gt; " + l.text + " </span><span class='status'>[" + l.status + "]</span>";
+                    transitionLogs.appendChild(div);
+                    idx++;
+                    setTimeout(printT, l.delay);
+                } else {
+                    setTimeout(function() {
+                        location.replace(target);
+                    }, 350);
                 }
-            }, 80);
+            }
+            printT();
         } else {
             location.replace(target);
         }
@@ -186,7 +199,6 @@
         if (startBtn) startBtn.addEventListener("click", fire);
     }
 
-    // Connect START CTA button
     if (startBtn) {
         startBtn.addEventListener("click", function () {
             go();
