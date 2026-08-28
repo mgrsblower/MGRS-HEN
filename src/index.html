@@ -32,71 +32,40 @@
   <span>CIPHER &middot; AES-256/GCM</span>
 </div>
 
-<!-- Fixed-Size Static Terminal Container -->
-<main id="wrap" class="retro-container">
-  <div class="retro-window">
-    <header class="retro-header">
-      <div class="window-dots" aria-hidden="true">
-        <div class="window-dot red"></div>
-        <div class="window-dot yellow"></div>
-        <div class="window-dot green"></div>
-      </div>
-      <div id="brand" class="retro-header-title">
-        MGRS-HEN // PS4 EXPLOIT CONSOLE
-      </div>
-      <div class="terminal-meta" id="term-clock">
-        UTC TIME
-      </div>
-    </header>
-
-    <!-- Dynamic 3-Stage Terminal Body -->
-    <div class="retro-body" id="terminal-body">
-      <!-- Stage 1 (Initial HTML): Vertically Centered Boot & Banner -->
-      <div id="stage-init" class="stage-init-container">
-        <div class="log-group">
-          <div class="log-heading">SYSTEM BOOT INITIATED...</div>
-          <div class="log-sub">Loading kernel modules...</div>
-          <div class="log-sub">Initializing hardware...</div>
-          <div class="log-sub">Starting terminal interface...</div>
-        </div>
-
-        <div class="ascii-banner" aria-label="MGRS-HEN Banner">
+<!-- SCREEN 1: FLOATING HERO LANDING (NO CONTAINER) -->
+<section id="screen-1-landing" class="landing-screen">
+  <div class="landing-ascii-banner" aria-label="MGRS-HEN Banner">
 ███    ███  ██████  ██████  ███████     ██   ██ ███████ ███    ██ 
 ████  ████ ██       ██   ██ ██          ██   ██ ██      ████   ██ 
 ██ ████ ██ ██   ███ ██████  ███████     ███████ █████   ██ ██  ██ 
 ██  ██  ██ ██    ██ ██   ██      ██     ██   ██ ██      ██  ██ ██ 
 ██      ██  ██████  ██   ██ ███████     ██   ██ ███████ ██   ████ 
-        </div>
-
-        <div class="status-suite">
-          <div>System ready. Firmware auto-detection active.</div>
-          <div class="suite-line">
-            <span>🎮</span>
-            <span>MGRS-HEN Exploit suite ready. Supported FW: 7.00 - 13.00</span>
-          </div>
-          <div id="state">detecting firmware...</div>
-          <div id="det" class="diagnostic-line"></div>
-          <div id="cache" class="cache-line"></div>
-        </div>
-      </div>
-    </div>
-
-    <footer class="retro-footer">
-      <div>MGRS-HEN Kernel Exploit Loader // Self-Hosted Offline Suite</div>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="color: var(--mgrs-green); font-weight: 700;">&bull; ONLINE</span>
-        <span>MEM 42%</span>
-        <div class="diamond" aria-hidden="true"></div>
-      </div>
-    </footer>
   </div>
-</main>
 
-<!-- Floating Bottom Badge -->
-<div class="retro-float-badge" aria-hidden="true">
-  <div class="dot"></div>
-  <span>Retro Terminal CLI</span>
-</div>
+  <div class="landing-subtitle-group">
+    <div>System ready. Firmware auto-detection active.</div>
+    <div class="landing-suite-line">
+      <span>🎮</span>
+      <span>MGRS-HEN Exploit suite ready. Supported FW: 7.00 - 13.00</span>
+    </div>
+    <div id="state">detecting firmware...</div>
+    <div id="det" class="diagnostic-line"></div>
+    <div id="cache" class="cache-line"></div>
+  </div>
+</section>
+
+<!-- SCREEN 2: FLOATING EXPLOIT STREAM (NO CONTAINER FRAME, HIDDEN SCROLLBAR) -->
+<main id="wrap" class="floating-exploit-root" style="display: none; opacity: 0;">
+  <header class="floating-exploit-header">
+    <div class="floating-exploit-title" id="brand">MGRS-HEN // EXPLOIT CONSOLE</div>
+    <div class="floating-exploit-sub">
+      <span id="exploit-sub-title">Secure Kernel Payload Injector</span>
+      <span id="term-clock">UTC TIME</span>
+    </div>
+  </header>
+
+  <pre id="out" aria-label="Exploit console output"></pre>
+</main>
 
 <script>
 // Live Clocks
@@ -117,7 +86,10 @@ setInterval(updateClocks, 1000);
     var stateEl = document.getElementById("state");
     var detEl = document.getElementById("det");
     var cacheEl = document.getElementById("cache");
-    var terminalBody = document.getElementById("terminal-body");
+    var screen1Landing = document.getElementById("screen-1-landing");
+    var wrapEl = document.getElementById("wrap");
+    var brandEl = document.getElementById("brand");
+    var subTitleEl = document.getElementById("exploit-sub-title");
 
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
@@ -151,67 +123,44 @@ setInterval(updateClocks, 1000);
     if (!bug) { setState("UNSUPPORTED FIRMWARE", "bad"); return; }
 
     var launched = false;
-    var TRANS_LOGS = [
-        { text: "BREACHING KERNEL MEMORY...", delay: 100, status: "OK" },
-        { text: "CORRUPTING JSARRAY BUFFER (CVE-2024-X)...", delay: 120, status: "OK" },
-        { text: "MAPPING RWX HEAP AT 0x00007FFFFFE00000...", delay: 160, status: "DONE" },
-        { text: "DISABLING KERNEL WRITE PROTECTION (CR0)...", delay: 140, status: "OK" },
-        { text: "INJECTING KERNEL PAYLOAD (payload.bin)...", delay: 180, status: "LOADED" },
-        { text: "ESTABLISHING RPC ROOT SHELL...", delay: 140, status: "ESTABLISHED" }
-    ];
 
     function go() { 
         if (launched) return;
         launched = true;
         
-        // CLEAN SCREEN 1 -> 2 (Vertically Centered)
-        terminalBody.innerHTML = '<div class="stage-breach">'
-            + '<div class="breach-heading">MGRS-HEN // KERNEL MEMORY EXPLOITATION</div>'
-            + '<div class="breach-logs" id="breach-logs"></div>'
-            + '</div>';
-        
-        var breachLogsEl = document.getElementById("breach-logs");
-        var idx = 0;
+        // Update header details for exploit view
+        if (brandEl) brandEl.textContent = "MGRS-HEN // " + (bug === "lapse" ? "LAPSE" : "POOPS") + " EXPLOIT CHAIN";
+        if (subTitleEl) subTitleEl.textContent = "Secure Kernel Payload Injector · FW " + (bug === "lapse" ? "11.00 - 12.02" : "12.50 - 13.00");
 
-        function printT() {
-            if (idx < TRANS_LOGS.length) {
-                var l = TRANS_LOGS[idx];
-                var div = document.createElement("div");
-                div.className = "breach-log-line";
-                div.innerHTML = "<span>&gt; " + l.text + " </span><span class='status'>[" + l.status + "]</span>";
-                if (breachLogsEl) breachLogsEl.appendChild(div);
-                idx++;
-                setTimeout(printT, l.delay);
-            } else {
-                // Wait 400ms, then CLEAN SCREEN 2 -> 3 (Top Aligned with Auto-Scroll)
-                setTimeout(function() {
-                    terminalBody.innerHTML = '<div class="stage-exploit">'
-                        + '<div class="exploit-heading">MGRS-HEN SYSTEM // ' + (bug === "lapse" ? "LAPSE" : "POOPS") + ' EXPLOIT CHAIN</div>'
-                        + '<div class="exploit-sub">Secure Kernel Payload Injector &middot; FW ' + (bug === "lapse" ? "11.00 - 12.02" : "12.50 - 13.00") + '</div>'
-                        + '<div id="state" class="exploit-sub" style="color: var(--mgrs-yellow);">launching ' + bug + ' chain...</div>'
-                        + '<pre id="out" aria-label="Exploit console output"></pre>'
-                        + '</div>';
-
-                    // Observe DOM changes on #out to ensure continuous auto-scroll
-                    var outElem = document.getElementById("out");
-                    if (window.MutationObserver && outElem) {
-                        var obs = new MutationObserver(function () {
-                            terminalBody.scrollTop = terminalBody.scrollHeight;
-                            outElem.scrollTop = outElem.scrollHeight;
-                        });
-                        obs.observe(outElem, { childList: true, characterData: true, subtree: true });
-                    }
-
-                    // Execute exploit module directly in this clean terminal body!
-                    if (bug === "lapse") {
-                        import("./chain_lapse.js");
-                    } else if (bug === "poops") {
-                        import("./chain_poops.js");
-                    }
-                }, 400);
-            }
+        // Fade out Screen 1
+        if (screen1Landing) {
+            screen1Landing.style.opacity = "0";
+            screen1Landing.style.transform = "scale(0.96)";
         }
-        printT();
+
+        setTimeout(function() {
+            if (screen1Landing) screen1Landing.style.display = "none";
+            if (wrapEl) {
+                wrapEl.style.display = "flex";
+                setTimeout(function() { wrapEl.style.opacity = "1"; }, 30);
+            }
+
+            // Observe DOM changes on #out to ensure continuous auto-scroll
+            var outElem = document.getElementById("out");
+            if (window.MutationObserver && outElem) {
+                var obs = new MutationObserver(function () {
+                    outElem.scrollTop = outElem.scrollHeight;
+                });
+                obs.observe(outElem, { childList: true, characterData: true, subtree: true });
+            }
+
+            // Execute exploit module directly in this floating exploit view!
+            if (bug === "lapse") {
+                import("./chain_lapse.js");
+            } else if (bug === "poops") {
+                import("./chain_poops.js");
+            }
+        }, 400);
     }
 
     function waitForTap(msg, action) {
@@ -227,16 +176,16 @@ setInterval(updateClocks, 1000);
 
     var ac = window.applicationCache;
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        setState("launching exploit suite...", "ok");
-        setTimeout(go, 1500);
+        setState("launching exploit suite in 5s...", "ok");
+        setTimeout(go, 5000);
     } else if (!navigator.onLine) {
         setCache("offline -- from cache", true);
-        setState("launching exploit suite...", "ok");
-        setTimeout(go, 1500);
+        setState("launching exploit suite in 5s...", "ok");
+        setTimeout(go, 5000);
     } else if (ac.status === ac.IDLE) {
         setCache("cached", true);
-        setState("launching exploit suite...", "ok");
-        setTimeout(go, 1500);
+        setState("launching exploit suite in 5s...", "ok");
+        setTimeout(go, 5000);
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("update downloaded", true);
@@ -264,8 +213,8 @@ setInterval(updateClocks, 1000);
 
         ac.addEventListener("noupdate", function () {
             setCache("cached -- offline ready", true);
-            setState("launching exploit suite...", "ok");
-            setTimeout(go, 1500);
+            setState("launching exploit suite in 5s...", "ok");
+            setTimeout(go, 5000);
         }, false);
         ac.addEventListener("error", function () {
             setCache("cache unavailable");
