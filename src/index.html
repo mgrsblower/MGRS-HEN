@@ -183,7 +183,7 @@ setInterval(updateClocks, 1000);
                 idx++;
                 setTimeout(printT, l.delay);
             } else {
-                // Wait 400ms, then CLEAN SCREEN 2 -> 3 (Top Aligned)
+                // Wait 400ms, then CLEAN SCREEN 2 -> 3 (Top Aligned with Auto-Scroll)
                 setTimeout(function() {
                     terminalBody.innerHTML = '<div class="stage-exploit">'
                         + '<div class="exploit-heading">MGRS-HEN SYSTEM // ' + (bug === "lapse" ? "LAPSE" : "POOPS") + ' EXPLOIT CHAIN</div>'
@@ -191,6 +191,16 @@ setInterval(updateClocks, 1000);
                         + '<div id="state" class="exploit-sub" style="color: var(--mgrs-yellow);">launching ' + bug + ' chain...</div>'
                         + '<pre id="out" aria-label="Exploit console output"></pre>'
                         + '</div>';
+
+                    // Observe DOM changes on #out to ensure continuous auto-scroll
+                    var outElem = document.getElementById("out");
+                    if (window.MutationObserver && outElem) {
+                        var obs = new MutationObserver(function () {
+                            terminalBody.scrollTop = terminalBody.scrollHeight;
+                            outElem.scrollTop = outElem.scrollHeight;
+                        });
+                        obs.observe(outElem, { childList: true, characterData: true, subtree: true });
+                    }
 
                     // Execute exploit module directly in this clean terminal body!
                     if (bug === "lapse") {

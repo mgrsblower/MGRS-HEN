@@ -210,8 +210,8 @@ html, body {
   flex-direction: column;
   font-family: "JetBrains Mono", monospace !important;
   background: transparent !important;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   scrollbar-width: thin;
   scrollbar-color: rgba(56, 255, 156, 0.45) transparent;
   position: relative;
@@ -367,7 +367,7 @@ html, body {
 }
 
 /* ============================================================
-   STAGE 3: TOP-ALIGNED STREAMING LOGS
+   STAGE 3: TOP-ALIGNED STREAMING LOGS (AUTO-SCROLL ENABLED)
    ============================================================ */
 .stage-exploit {
   display: flex;
@@ -375,6 +375,7 @@ html, body {
   gap: 8px;
   flex: 1;
   width: 100%;
+  min-height: 0;
   color: #38ff9c !important;
 }
 
@@ -404,6 +405,25 @@ html, body {
   margin: 0;
   padding: 6px 0;
   flex: 1;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 255, 156, 0.45) transparent;
+}
+
+#out::-webkit-scrollbar {
+  width: 6px;
+}
+#out::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+#out::-webkit-scrollbar-thumb {
+  background: rgba(56, 255, 156, 0.4);
+  box-shadow: 0 0 6px rgba(56, 255, 156, 0.35);
+}
+#out::-webkit-scrollbar-thumb:hover {
+  background: #38ff9c;
+  box-shadow: 0 0 10px rgba(56, 255, 156, 0.65);
 }
 
 #out span.ok {
