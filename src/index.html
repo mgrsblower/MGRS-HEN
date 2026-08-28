@@ -12,15 +12,13 @@
 <!-- Background Matrix Rain Drop Canvas -->
 <canvas id="matrix-canvas"></canvas>
 
-<!-- CRT Effects (Identical to Referensi/index.html) -->
+<!-- CRT Grid & Vignette (Clean: Scanline & Sweep Removed) -->
 <div class="crt-root" aria-hidden="true">
   <div class="crt-grid"></div>
-  <div class="crt-scanlines"></div>
-  <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
 </div>
 
-<!-- 4-Corner HUD (Identical to Referensi/index.html) -->
+<!-- 4-Corner HUD -->
 <div class="landing-corner tl">
   <span class="dot"></span>
   <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
@@ -37,57 +35,63 @@
   <span>CIPHER &middot; AES-256/GCM</span>
 </div>
 
-<!-- Paper Retro Terminal CLI Window (Transparent Glass & Lancip) -->
+<!-- Fixed-Size Static Terminal Container -->
 <main id="wrap" class="retro-container">
   <div class="retro-window">
-    <div class="retro-header">
+    <header class="retro-header">
       <div class="window-dots" aria-hidden="true">
         <div class="window-dot red"></div>
         <div class="window-dot yellow"></div>
         <div class="window-dot green"></div>
       </div>
-      <div class="retro-header-title">
+      <div id="brand" class="retro-header-title">
         MGRS-HEN // PS4 EXPLOIT CONSOLE
       </div>
-    </div>
-
-    <div class="retro-body">
-      <div class="log-group">
-        <div class="log-heading">SYSTEM BOOT INITIATED...</div>
-        <div class="log-sub">Loading kernel modules...</div>
-        <div class="log-sub">Initializing hardware...</div>
-        <div class="log-sub">Starting terminal interface...</div>
+      <div class="terminal-meta" id="term-clock">
+        UTC TIME
       </div>
+    </header>
 
-      <div class="log-group">
-        <div class="log-heading">Exploit Console</div>
-        <div class="log-sub">Initializing...</div>
-      </div>
+    <!-- Dynamic 3-Stage Terminal Body -->
+    <div class="retro-body" id="terminal-body">
+      <!-- Stage 1 (Initial HTML): Vertically Centered Boot & Banner -->
+      <div id="stage-init" class="stage-init-container">
+        <div class="log-group">
+          <div class="log-heading">SYSTEM BOOT INITIATED...</div>
+          <div class="log-sub">Loading kernel modules...</div>
+          <div class="log-sub">Initializing hardware...</div>
+          <div class="log-sub">Starting terminal interface...</div>
+        </div>
 
-      <div class="ascii-banner" aria-label="MGRS-HEN Banner">
+        <div class="ascii-banner" aria-label="MGRS-HEN Banner">
 ███    ███  ██████  ██████  ███████     ██   ██ ███████ ███    ██ 
 ████  ████ ██       ██   ██ ██          ██   ██ ██      ████   ██ 
 ██ ████ ██ ██   ███ ██████  ███████     ███████ █████   ██ ██  ██ 
 ██  ██  ██ ██    ██ ██   ██      ██     ██   ██ ██      ██  ██ ██ 
 ██      ██  ██████  ██   ██ ███████     ██   ██ ███████ ██   ████ 
-      </div>
-
-      <div class="status-suite">
-        <div>System ready. Firmware auto-detection active.</div>
-        <div class="suite-line">
-          <span>🎮</span>
-          <span>MGRS-HEN Exploit suite ready. Supported FW: 7.00 - 13.00</span>
         </div>
-        <div id="state">detecting firmware...</div>
-        <div id="det" class="diagnostic-line"></div>
-        <div id="cache" class="cache-line"></div>
+
+        <div class="status-suite">
+          <div>System ready. Firmware auto-detection active.</div>
+          <div class="suite-line">
+            <span>🎮</span>
+            <span>MGRS-HEN Exploit suite ready. Supported FW: 7.00 - 13.00</span>
+          </div>
+          <div id="state">detecting firmware...</div>
+          <div id="det" class="diagnostic-line"></div>
+          <div id="cache" class="cache-line"></div>
+        </div>
       </div>
     </div>
 
-    <div class="retro-footer">
+    <footer class="retro-footer">
       <div>MGRS-HEN Kernel Exploit Loader // Self-Hosted Offline Suite</div>
-      <div class="diamond" aria-hidden="true"></div>
-    </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="color: var(--mgrs-green); font-weight: 700;">&bull; ONLINE</span>
+        <span>MEM 42%</span>
+        <div class="diamond" aria-hidden="true"></div>
+      </div>
+    </footer>
   </div>
 </main>
 
@@ -97,23 +101,20 @@
   <span>Retro Terminal CLI</span>
 </div>
 
-<!-- Stage 2: Breach Transition View -->
-<div id="transition-view" class="transition-root" aria-hidden="true">
-  <div class="transition-logs" id="transition-logs"></div>
-</div>
-
 <script>
 // Live Clocks
 function updateClocks() {
     var now = new Date();
     var utcStr = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
     var hudClock = document.getElementById('hud-clock');
+    var termClock = document.getElementById('term-clock');
     if (hudClock) hudClock.innerHTML = '<span>' + utcStr + '</span><br><span>UPLINK &middot; SECURE</span>';
+    if (termClock) termClock.textContent = utcStr;
 }
 updateClocks();
 setInterval(updateClocks, 1000);
 
-// Matrix Background Animation (Identical to Referensi/app.js)
+// Matrix Background Animation
 var canvas = document.getElementById('matrix-canvas');
 if (canvas) {
     var ctx = canvas.getContext('2d');
@@ -157,9 +158,7 @@ if (canvas) {
     var stateEl = document.getElementById("state");
     var detEl = document.getElementById("det");
     var cacheEl = document.getElementById("cache");
-    var wrapEl = document.getElementById("wrap");
-    var transitionView = document.getElementById("transition-view");
-    var transitionLogs = document.getElementById("transition-logs");
+    var terminalBody = document.getElementById("terminal-body");
 
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
@@ -192,49 +191,58 @@ if (canvas) {
 
     if (!bug) { setState("UNSUPPORTED FIRMWARE", "bad"); return; }
 
-    var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html")
-        + location.search;
-
     var launched = false;
     var TRANS_LOGS = [
-        { text: "BREACHING KERNEL MEMORY...", delay: 140, status: "OK" },
-        { text: "CORRUPTING JSARRAY BUFFER (CVE-2024-X)...", delay: 180, status: "OK" },
-        { text: "MAPPING RWX HEAP AT 0x00007FFFFFE00000...", delay: 240, status: "DONE" },
-        { text: "DISABLING KERNEL WRITE PROTECTION (CR0)...", delay: 200, status: "OK" },
-        { text: "INJECTING KERNEL PAYLOAD (payload.bin)...", delay: 260, status: "LOADED" },
-        { text: "ESTABLISHING RPC ROOT SHELL...", delay: 180, status: "ESTABLISHED" }
+        { text: "BREACHING KERNEL MEMORY...", delay: 100, status: "OK" },
+        { text: "CORRUPTING JSARRAY BUFFER (CVE-2024-X)...", delay: 120, status: "OK" },
+        { text: "MAPPING RWX HEAP AT 0x00007FFFFFE00000...", delay: 160, status: "DONE" },
+        { text: "DISABLING KERNEL WRITE PROTECTION (CR0)...", delay: 140, status: "OK" },
+        { text: "INJECTING KERNEL PAYLOAD (payload.bin)...", delay: 180, status: "LOADED" },
+        { text: "ESTABLISHING RPC ROOT SHELL...", delay: 140, status: "ESTABLISHED" }
     ];
 
     function go() { 
         if (launched) return;
         launched = true;
         
-        if (wrapEl) {
-            wrapEl.style.opacity = "0";
-            wrapEl.style.filter = "blur(8px)";
-        }
-        if (transitionView && transitionLogs) {
-            transitionView.style.display = "flex";
-            var idx = 0;
-            function printT() {
-                if (idx < TRANS_LOGS.length) {
-                    var l = TRANS_LOGS[idx];
-                    var div = document.createElement("div");
-                    div.className = "transition-log-line";
-                    div.innerHTML = "<span>&gt; " + l.text + " </span><span class='status'>[" + l.status + "]</span>";
-                    transitionLogs.appendChild(div);
-                    idx++;
-                    setTimeout(printT, l.delay);
-                } else {
-                    setTimeout(function() {
-                        location.replace(target);
-                    }, 350);
-                }
+        // CLEAN SCREEN 1 -> 2 (Vertically Centered)
+        terminalBody.innerHTML = '<div class="stage-breach">'
+            + '<div class="breach-heading">MGRS-HEN // KERNEL MEMORY EXPLOITATION</div>'
+            + '<div class="breach-logs" id="breach-logs"></div>'
+            + '</div>';
+        
+        var breachLogsEl = document.getElementById("breach-logs");
+        var idx = 0;
+
+        function printT() {
+            if (idx < TRANS_LOGS.length) {
+                var l = TRANS_LOGS[idx];
+                var div = document.createElement("div");
+                div.className = "breach-log-line";
+                div.innerHTML = "<span>&gt; " + l.text + " </span><span class='status'>[" + l.status + "]</span>";
+                if (breachLogsEl) breachLogsEl.appendChild(div);
+                idx++;
+                setTimeout(printT, l.delay);
+            } else {
+                // Wait 400ms, then CLEAN SCREEN 2 -> 3 (Top Aligned)
+                setTimeout(function() {
+                    terminalBody.innerHTML = '<div class="stage-exploit">'
+                        + '<div class="exploit-heading">MGRS-HEN SYSTEM // ' + (bug === "lapse" ? "LAPSE" : "POOPS") + ' EXPLOIT CHAIN</div>'
+                        + '<div class="exploit-sub">Secure Kernel Payload Injector &middot; FW ' + (bug === "lapse" ? "11.00 - 12.02" : "12.50 - 13.00") + '</div>'
+                        + '<div id="state" class="exploit-sub" style="color: var(--mgrs-yellow);">launching ' + bug + ' chain...</div>'
+                        + '<pre id="out" aria-label="Exploit console output"></pre>'
+                        + '</div>';
+
+                    // Execute exploit module directly in this clean terminal body!
+                    if (bug === "lapse") {
+                        import("./chain_lapse.js");
+                    } else if (bug === "poops") {
+                        import("./chain_poops.js");
+                    }
+                }, 400);
             }
-            printT();
-        } else {
-            location.replace(target);
         }
+        printT();
     }
 
     function waitForTap(msg, action) {
@@ -251,15 +259,15 @@ if (canvas) {
     var ac = window.applicationCache;
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
         setState("launching exploit suite...", "ok");
-        setTimeout(go, 600);
+        setTimeout(go, 1500);
     } else if (!navigator.onLine) {
         setCache("offline -- from cache", true);
         setState("launching exploit suite...", "ok");
-        setTimeout(go, 600);
+        setTimeout(go, 1500);
     } else if (ac.status === ac.IDLE) {
         setCache("cached", true);
         setState("launching exploit suite...", "ok");
-        setTimeout(go, 600);
+        setTimeout(go, 1500);
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("update downloaded", true);
@@ -288,7 +296,7 @@ if (canvas) {
         ac.addEventListener("noupdate", function () {
             setCache("cached -- offline ready", true);
             setState("launching exploit suite...", "ok");
-            setTimeout(go, 600);
+            setTimeout(go, 1500);
         }, false);
         ac.addEventListener("error", function () {
             setCache("cache unavailable");

@@ -1,9 +1,12 @@
+# Build artifacts & temp
 .worktrees/
 .vercel/
 .impeccable/
 *.log
 .DS_Store
 Thumbs.db
+
+# Offline Sandbox / Experiments (Excluded from deployment & production repo)
 Referensi/
 app.js
 index.html
@@ -11,3 +14,6 @@ style.css
 dump.html
 dump.js
 /fonts/
+
+# Documentation / Research Scratchpad
+docs/
