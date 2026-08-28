@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
+<canvas id="matrix-canvas"></canvas>
 <div class="crt-texture" aria-hidden="true"></div>
 <main class="retro-terminal">
   <header id="brand" class="retro-header">
@@ -36,6 +37,38 @@
     <span class="footer-jewel" aria-hidden="true"></span>
   </footer>
 </main>
+<script>
+(function() {
+  var c = document.getElementById("matrix-canvas");
+  if (!c) return;
+  var ctx = c.getContext("2d");
+  var w, h, cols, drops;
+  var chars = "0123456789ABCDEF+=-:.*#@+WXZabcdefghijklmnopqrstuvwxyz";
+  function init() {
+    w = c.width = window.innerWidth;
+    h = c.height = window.innerHeight;
+    cols = Math.floor(w / 14);
+    drops = Array(cols).fill(1);
+  }
+  function draw() {
+    ctx.fillStyle = "rgba(17, 20, 23, 0.08)";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#00ff66";
+    ctx.font = '12px "JetBrains Mono", monospace';
+    for (var i = 0; i < drops.length; i++) {
+      var text = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(text, i * 14, drops[i] * 14);
+      if (drops[i] * 14 > h && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+  window.addEventListener("resize", init);
+  init();
+  setInterval(draw, 35);
+})();
+</script>
 <script type="module">import "./chain_lapse.js";</script>
 </body>
 </html>
