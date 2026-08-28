@@ -4,53 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="MGRS-HEN offline PS4 WebKit firmware detector and self-hosted exploit console.">
-<title>MGRS-HEN | Firmware detector</title>
+<title>MGRS-HEN | Exploit Console</title>
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <canvas id="matrix-canvas"></canvas>
-<div class="crt-texture" aria-hidden="true"></div>
-<main class="retro-terminal">
-  <header id="brand" class="retro-header">
-    <div class="traffic-lights" aria-hidden="true">
-      <span class="dot dot-close"></span>
-      <span class="dot dot-min"></span>
-      <span class="dot dot-max"></span>
-    </div>
-    <div class="retro-title">MGRS-HEN // PS4 EXPLOIT CONSOLE</div>
-  </header>
-  <div id="wrap" class="retro-screen">
-    <div class="boot-logs" aria-hidden="true">
-      <div class="boot-lead">SYSTEM BOOT INITIATED...</div>
-      <div>Loading kernel modules...</div>
-      <div>Initializing hardware...</div>
-      <div>Starting terminal interface...</div>
-    </div>
-    <div class="app-init" aria-hidden="true">
-      <div class="boot-lead">Exploit Console</div>
-      <div>Initializing...</div>
-    </div>
-    <pre class="ascii-banner" aria-label="MGRS-HEN Logo">
-███    ███  ██████  ██████  ███████     ██   ██ ███████ ███    ██ 
-████  ████ ██       ██   ██ ██          ██   ██ ██      ████   ██ 
-██ ████ ██ ██   ███ ██████  ███████     ███████ █████   ██ ██  ██ 
-██  ██  ██ ██    ██ ██   ██      ██     ██   ██ ██      ██  ██ ██ 
-██      ██  ██████  ██   ██ ███████     ██   ██ ███████ ██   ████ </pre>
-    <div class="status-block" aria-label="Firmware status">
-      <div class="status-label">STATUS //</div>
-      <div id="state">detecting firmware...</div>
-      <div id="det" class="diagnostic-line"></div>
-      <div id="cache" class="cache-line"></div>
-    </div>
-    <div class="terminal-note">Firmware routing is automatic. Keep this page open until the cache state is ready.</div>
+
+<!-- CRT Visual Overlays -->
+<div class="crt-root" aria-hidden="true">
+  <div class="crt-scanlines"></div>
+  <div class="crt-sweep"></div>
+  <div class="crt-vignette"></div>
+</div>
+
+<!-- 4-Corner Tactical HUD -->
+<div class="landing-corner tl" aria-hidden="true">
+  <span class="dot-indicator"></span>
+  <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
+</div>
+<div class="landing-corner tr" id="hud-clock" aria-hidden="true">
+  <span>UTC TIME &middot; SYNCING...</span><br>
+  <span>UPLINK &middot; SECURE</span>
+</div>
+<div class="landing-corner bl" aria-hidden="true">
+  <span>v1.0.0 &middot; BUILD 20260210</span>
+</div>
+<div class="landing-corner br" aria-hidden="true">
+  <span>LAT 0.000 &middot; LON 0.000</span><br>
+  <span>CIPHER &middot; AES-256/GCM</span>
+</div>
+
+<!-- Landing Hero Screen -->
+<main id="wrap" class="landing-container">
+  <div class="landing-tag" aria-hidden="true">&gt;&nbsp; ENCRYPTED CHANNEL &nbsp;&middot;&nbsp; ACCESS RESTRICTED</div>
+  
+  <h1 id="brand" class="landing-title">
+    <span class="brace">[</span>MGRS-HEN<span class="brace">]</span>
+  </h1>
+  
+  <div class="landing-subtitle" aria-hidden="true">
+    <span>SYSTEM INTERFACE</span>
+    <span class="divider">//</span>
+    <span>READY<span class="blink-cursor"></span></span>
   </div>
-  <footer class="retro-footer">
-    <span>MGRS-HEN Kernel Exploit Loader // Self-Hosted Offline Suite</span>
-    <span class="footer-jewel" aria-hidden="true"></span>
-  </footer>
+  
+  <div class="status-card" aria-label="Firmware and Cache Status">
+    <div class="status-label">SYSTEM TELEMETRY //</div>
+    <div id="state">detecting firmware...</div>
+    <div id="det" class="diagnostic-line"></div>
+    <div id="cache" class="cache-line"></div>
+  </div>
+
+  <button id="start-btn" class="landing-cta" aria-label="Start MGRS-HEN System">
+    <span class="bracket">[</span>&gt;&nbsp;START<span class="bracket">]</span>
+  </button>
+
+  <div class="landing-telemetry" aria-hidden="true">
+    <span>KERNEL &middot; IDLE</span>
+    <span>NET &middot; 0.8 ms</span>
+    <span>MEM &middot; 42%</span>
+    <span>THREATS &middot; 0</span>
+  </div>
 </main>
 
 <script>
+// Matrix Background Canvas
 (function() {
   var c = document.getElementById("matrix-canvas");
   if (!c) return;
@@ -64,9 +82,9 @@
     drops = Array(cols).fill(1);
   }
   function draw() {
-    ctx.fillStyle = "rgba(17, 20, 23, 0.08)";
+    ctx.fillStyle = "rgba(5, 8, 5, 0.08)";
     ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#00ff66";
+    ctx.fillStyle = "#38ff9c";
     ctx.font = '12px "JetBrains Mono", monospace';
     for (var i = 0; i < drops.length; i++) {
       var text = chars[Math.floor(Math.random() * chars.length)];
@@ -81,6 +99,19 @@
   init();
   setInterval(draw, 35);
 })();
+
+// Tactical HUD Clock
+(function() {
+  var clockEl = document.getElementById("hud-clock");
+  if (!clockEl) return;
+  function updateClock() {
+    var now = new Date();
+    var utc = now.toISOString().replace("T", " ").slice(0, 19) + " UTC";
+    clockEl.innerHTML = "<span>" + utc + "</span><br><span>UPLINK &middot; SECURE</span>";
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
 </script>
 
 <script>
@@ -88,6 +119,7 @@
     var stateEl = document.getElementById("state");
     var detEl = document.getElementById("det");
     var cacheEl = document.getElementById("cache");
+    var startBtn = document.getElementById("start-btn");
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
     var params = new URLSearchParams(location.search);
@@ -121,33 +153,44 @@
 
     var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html")
         + location.search;
-    function go() { setState("loading " + bug + " chain...", "warn");
-                    location.replace(target); }
+    function go() { 
+        setState("launching " + bug + " terminal...", "warn");
+        location.replace(target); 
+    }
 
     function waitForTap(msg, action) {
         setState(msg, "warn");
         function fire() {
             window.removeEventListener("click", fire);
             window.removeEventListener("keydown", fire);
+            if (startBtn) startBtn.removeEventListener("click", fire);
             action();
         }
         window.addEventListener("click", fire);
         window.addEventListener("keydown", fire);
+        if (startBtn) startBtn.addEventListener("click", fire);
+    }
+
+    // Connect START CTA button to trigger launch
+    if (startBtn) {
+        startBtn.addEventListener("click", function () {
+            go();
+        });
     }
 
     var ac = window.applicationCache;
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        go();
+        setState("SYSTEM READY -- PRESS START", "ok");
     } else if (!navigator.onLine) {
         setCache("offline -- from cache", true);
-        go();
+        setState("SYSTEM READY -- PRESS START", "ok");
     } else if (ac.status === ac.IDLE) {
         setCache("cached", true);
-        go();
+        setState("SYSTEM READY -- PRESS START", "ok");
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("update downloaded", true);
-        waitForTap("UPDATE READY -- press X or tap to reload & run",
+        waitForTap("UPDATE READY -- PRESS START OR X TO RELOAD",
                    function () { location.reload(); });
     } else {
         setCache("checking cache...");
@@ -160,26 +203,26 @@
 
         ac.addEventListener("cached", function () {
             setCache("cached for offline use", true);
-            waitForTap("CACHED (first run) -- press X or tap to run", go);
+            waitForTap("CACHED (first run) -- PRESS START OR X TO RUN", go);
         }, false);
         ac.addEventListener("updateready", function () {
             try { ac.swapCache(); } catch (e) {}
             setCache("update downloaded", true);
-            waitForTap("UPDATE READY -- press X or tap to reload & run",
+            waitForTap("UPDATE READY -- PRESS START OR X TO RELOAD",
                        function () { location.reload(); });
         }, false);
 
         ac.addEventListener("noupdate", function () {
             setCache("cached -- offline ready", true);
-            go();
+            setState("SYSTEM READY -- PRESS START", "ok");
         }, false);
         ac.addEventListener("error", function () {
             setCache("cache unavailable");
-            waitForTap("CACHE FAILED -- press X or tap to run anyway", go);
+            waitForTap("CACHE FAILED -- PRESS START OR X TO RUN ANYWAY", go);
         }, false);
         ac.addEventListener("obsolete", function () {
             setCache("cache obsolete");
-            waitForTap("CACHE OBSOLETE -- press X or tap to run", go);
+            waitForTap("CACHE OBSOLETE -- PRESS START OR X TO RUN", go);
         }, false);
     }
 })();

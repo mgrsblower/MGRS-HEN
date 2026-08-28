@@ -4,40 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="MGRS-HEN Poops chain execution console for supported PS4 firmware.">
-<title>MGRS-HEN | Poops chain</title>
+<title>MGRS-HEN | Poops Chain Terminal</title>
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <canvas id="matrix-canvas"></canvas>
-<div class="crt-texture" aria-hidden="true"></div>
-<main class="retro-terminal">
-  <header id="brand" class="retro-header">
-    <div class="traffic-lights" aria-hidden="true">
-      <span class="dot dot-close"></span>
-      <span class="dot dot-min"></span>
-      <span class="dot dot-max"></span>
-    </div>
-    <div class="retro-title">MGRS-HEN // POOPS CHAIN</div>
-  </header>
-  <div id="wrap" class="retro-screen chain-screen">
-    <div class="status-block" aria-label="Poops status">
-      <div class="status-label">STATUS //</div>
-      <div id="state">loading poops chain...</div>
-    </div>
-    <section class="log-shell" aria-label="Poops chain output">
-      <div class="log-header">
-        <span>STDOUT // LIVE STREAM</span>
-        <span>FW 12.50 - 13.00</span>
+
+<!-- CRT Visual Overlays -->
+<div class="crt-root" aria-hidden="true">
+  <div class="crt-scanlines"></div>
+  <div class="crt-sweep"></div>
+  <div class="crt-vignette"></div>
+</div>
+
+<main id="wrap" class="terminal-root">
+  <div class="terminal-window">
+    <header id="brand" class="terminal-header">
+      <div class="title">
+        <span class="dot-indicator"></span>
+        <span>&boxdr;&nbsp;MGRS-HEN TERMINAL</span>
       </div>
-      <div id="out"></div>
-    </section>
+      <div class="meta" aria-hidden="true">
+        <span>TTY &middot; pts/0</span>
+        <span>ENC &middot; AES-256</span>
+        <span id="term-clock">UTC TIME</span>
+      </div>
+    </header>
+
+    <div class="terminal-body">
+      <div class="chain-info">
+        <div class="chain-heading">MGRS-HEN SYSTEM // POOPS EXPLOIT CHAIN</div>
+        <div>Secure Kernel Payload Injector &middot; FW 12.50 - 13.00</div>
+        <div id="state">loading poops chain...</div>
+      </div>
+
+      <div id="out" aria-label="Poops chain output"></div>
+    </div>
+
+    <footer class="terminal-footer">
+      <div class="left">
+        <span class="online-dot">&bull;&nbsp;ONLINE</span>
+        <span>SESSION &middot; #A7F3</span>
+        <span>USER &middot; root</span>
+      </div>
+      <div class="right">
+        <span>FW 12.50-13.00</span>
+        <span>MEM &middot; 42%</span>
+        <span>UPLINK &middot; SECURE</span>
+      </div>
+    </footer>
   </div>
-  <footer class="retro-footer">
-    <span>MGRS-HEN Kernel Exploit Loader // Self-Hosted Offline Suite</span>
-    <span class="footer-jewel" aria-hidden="true"></span>
-  </footer>
 </main>
+
 <script>
+// Matrix Background Canvas
 (function() {
   var c = document.getElementById("matrix-canvas");
   if (!c) return;
@@ -51,9 +71,9 @@
     drops = Array(cols).fill(1);
   }
   function draw() {
-    ctx.fillStyle = "rgba(17, 20, 23, 0.08)";
+    ctx.fillStyle = "rgba(5, 8, 5, 0.08)";
     ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#00ff66";
+    ctx.fillStyle = "#38ff9c";
     ctx.font = '12px "JetBrains Mono", monospace';
     for (var i = 0; i < drops.length; i++) {
       var text = chars[Math.floor(Math.random() * chars.length)];
@@ -67,6 +87,18 @@
   window.addEventListener("resize", init);
   init();
   setInterval(draw, 35);
+})();
+
+// Terminal Clock
+(function() {
+  var clockEl = document.getElementById("term-clock");
+  if (!clockEl) return;
+  function updateClock() {
+    var now = new Date();
+    clockEl.textContent = now.toISOString().replace("T", " ").slice(0, 19) + " UTC";
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
 })();
 </script>
 <script type="module">import "./chain_poops.js";</script>
