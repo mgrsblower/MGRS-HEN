@@ -9,30 +9,31 @@
 </head>
 <body>
 <div class="crt-texture" aria-hidden="true"></div>
-<main class="terminal-frame">
-  <header id="brand" class="terminal-header">
+<main class="retro-terminal">
+  <header id="brand" class="retro-header">
     <div class="traffic-lights" aria-hidden="true">
-      <span class="traffic-light traffic-close"></span>
-      <span class="traffic-light traffic-min"></span>
-      <span class="traffic-light traffic-max"></span>
+      <span class="dot dot-close"></span>
+      <span class="dot dot-min"></span>
+      <span class="dot dot-max"></span>
     </div>
-    <div class="brand-lockup"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
-    <div class="header-mode">PS4 / WEBKIT</div>
+    <div class="retro-title">MGRS-HEN // POOPS CHAIN</div>
   </header>
-  <div id="wrap" class="terminal-screen chain-screen">
-    <div class="terminal-kicker">CHAIN EXECUTION / POOPS <span class="kicker-led" aria-hidden="true"></span></div>
-    <section class="status-block" aria-label="Poops status">
-      <div class="status-prompt">STATUS //</div>
+  <div id="wrap" class="retro-screen chain-screen">
+    <div class="status-block" aria-label="Poops status">
+      <div class="status-label">STATUS //</div>
       <div id="state">loading poops chain...</div>
-    </section>
+    </div>
     <section class="log-shell" aria-label="Poops chain output">
-      <div class="log-header"><span>STDOUT</span><span>LIVE STREAM</span></div>
+      <div class="log-header">
+        <span>STDOUT // LIVE STREAM</span>
+        <span>FW 12.50 - 13.00</span>
+      </div>
       <div id="out"></div>
     </section>
   </div>
-  <footer class="terminal-footer">
-    <span>LOCAL HOST // MGRS-HEN</span>
-    <span>POOPS / 12.50 - 13.00</span>
+  <footer class="retro-footer">
+    <span>Manual page gcc(1) line 1 (press h for help or q to quit)</span>
+    <span class="footer-jewel" aria-hidden="true"></span>
   </footer>
 </main>
 <script type="module">import "./chain_poops.js";</script>

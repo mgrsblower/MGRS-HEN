@@ -1,142 +1,66 @@
-# MGRS-HEN Design System
+# MGRS-HEN Design System (Retro Terminal)
 
 ## 1. Atmosphere & Identity
 
-MGRS-HEN is a retro diagnostic terminal: black-green CRT contrast, a compact framed console, and explicit state language. Its signature is a small `MH` monogram beside a tracked wordmark, traffic-light status markers, a scanline texture, and one dominant state line followed by terse technical evidence. The reference terminal's atmosphere is translated into CSS only so the PS4 host stays offline-safe and the exploit runtime remains isolated.
+MGRS-HEN is a retro diagnostic terminal inspired by classic CRT phosphor monitors and modern floating window chrome: black-green CRT contrast, a compact framed console, and explicit state language. Its signature features include traffic-light status markers, a static CSS scanline texture, stacked boot sequence lines, a blocky ASCII logo, and a dominant state line followed by technical diagnostic evidence. The reference terminal's atmosphere is translated into pure CSS without remote fonts or runtime canvas so the PS4 host stays offline-safe and the exploit runtime remains completely isolated.
 
-## 2. Color
+## 2. Color Tokens
 
-The interface has one dark theme, extracted from the rendered reference at `https://raw-game.com/zrm/` on 2026-08-28.
+The interface uses a dedicated phosphor green CRT dark palette.
 
 | Role | Token | Value | Usage |
 |---|---|---:|---|
-| Surface/root | `--surface-root` | `#0b0d10` | Page background |
-| Surface/header | `--surface-header` | `#0e1116` | Brand bar |
-| Surface/log | `--surface-log` | `#11151b` | Chain output panel |
-| Text/primary | `--text-primary` | `#c8ced8` | Body and primary labels |
-| Text/secondary | `--text-secondary` | `#8b95a3` | Firmware detail |
-| Text/tertiary | `--text-tertiary` | `#8b95a3` | Cache progress and quiet labels |
-| Border/default | `--border-default` | `#1e2732` | Header and log outline |
-| Border/mark | `--border-mark` | `#3b4a5d` | Monogram outline |
-| Status/success | `--status-success` | `#7fd0a0` | Success and cached states |
-| Status/warning | `--status-warning` | `#d8c07f` | Waiting and active work |
-| Status/error | `--status-error` | `#d08a7f` | Unsupported and failure states |
-| Terminal/accent | `--terminal-accent` | `#00ff66` | Retro command accent and marker glow |
-| Terminal/accent-dim | `--terminal-accent-dim` | `#00b347` | Texture and quiet borders |
-| Terminal/surface | `--terminal-surface` | `#060907` | Inner terminal panel |
-| Terminal/header | `--terminal-header` | `#0b100d` | Terminal title bar |
-| Terminal/footer | `--terminal-footer` | `#002b11` | Status footer strip |
-
-Only these tokens may supply interface colors. Status colors carry meaning and are not decorative accents.
+| Primary accent | `--color-primary` | `#00ff66` | Active text, prompt, ASCII banner, highlight |
+| Secondary accent | `--color-secondary` | `#00b347` | Boot logs, subtitles, diagnostic labels |
+| Dimmed accent | `--color-dim` | `#006626` | Scrollbars and quiet details |
+| Background canvas | `--color-bg` | `#111417` | Fullscreen canvas background |
+| Terminal surface | `--color-terminal-bg` | `#060907` | Deep obsidian terminal screen |
+| Header surface | `--color-header-bg` | `#0b100d` | Title bar surface |
+| Footer surface | `--color-footer-bg` | `#002b11` | Status footer strip |
+| Log surface | `--color-log-bg` | `#040705` | Exploit chain output stream |
+| Border | `--color-border` | `rgba(0, 255, 102, 0.22)` | Window and panel outlines |
+| Glow | `--color-glow` | `rgba(0, 255, 102, 0.45)` | Subtle text & marker glow |
+| Close dot | `--dot-close` | `#ff5f56` | Window red traffic dot |
+| Minimize dot | `--dot-min` | `#ffbd2e` | Window yellow traffic dot |
+| Maximize dot | `--dot-max` | `#27c93f` | Window green traffic dot |
+| Status success | `--status-success` | `#00ff66` | Cached and operational states |
+| Status warning | `--status-warning` | `#ffbd2e` | Waiting, caching, and active work |
+| Status error | `--status-error` | `#ff5f56` | Unsupported and failure states |
 
 ## 3. Typography
 
 | Level | Size | Weight | Line Height | Tracking | Usage |
 |---|---:|---:|---:|---:|---|
-| Status | `22px` | `700` | `1.45` | `0` | Current state |
-| Body | `15px` | `400` | `1.45` | `0` | Default shell text |
-| Brand | `15px` | `700` | `1.45` | `0.14em` | MGRS-HEN wordmark |
-| Detail | `13px` | `400` | `1.45` | `0` | Firmware explanation |
-| Caption | `12px` | `400` | `1.45` | `0` | Cache status |
-| Log | `12px` | `400` | `1.45` | `0` | Exploit-chain output |
-| Monogram | `10px` | `700` | `28px` | `0` | MH mark |
+| Status | `18px` | `700` | `1.45` | `0` | Primary status (`#state`) |
+| ASCII Banner | `14px` | `700` | `1.15` | `0` | Blocky RETRO logo |
+| Body / Boot | `13.5px` | `400` | `1.5` | `0` | Default logs & shell text |
+| Diagnostic | `12.5px` | `400` | `1.45` | `0` | Firmware evidence (`#det`) |
+| Cache / Note | `12px` | `400` | `1.45` | `0` | Cache status (`#cache`) |
+| Log | `12.5px` | `400` | `1.45` | `0` | Exploit output (`#out`) |
+| Header Title | `12px` | `700` | `1.2` | `0.1em` | Window title bar |
+| Footer / Status | `11px` | `400` | `1.4` | `0` | Manual page status line |
 
-- Primary: `"Segoe UI", system-ui, sans-serif`.
-- Mono: `Consolas, monospace`.
-- No remote fonts are allowed.
-- Terminal accents use the local mono face; no glow is required for legibility.
+- Primary Font: `Consolas, "Courier New", monospace`
+- No remote fonts or Google Fonts are used in production runtime.
 
 ## 4. Spacing & Layout
 
-The working base unit is `4px`, with three reference-fidelity exceptions: `6px`, `10px`, and `18px` are retained because they are observable values in the supplied live reference.
-
 | Token | Value | Usage |
 |---|---:|---|
-| `--space-1` | `4px` | Tight status separation |
-| `--space-reference-6` | `6px` | Status-to-detail margin |
-| `--space-2` | `8px` | Brand vertical padding |
-| `--space-reference-10` | `10px` | Header horizontal and cache bottom spacing |
-| `--space-4` | `16px` | Content vertical padding |
-| `--space-reference-18` | `18px` | Content horizontal padding |
-| `--space-terminal-gutter` | `12px` | Narrow-screen terminal gutter |
-| `--space-terminal-frame` | `24px` | Wide-screen terminal gutter |
+| `--space-1` | `4px` | Tight separation |
+| `--space-2` | `8px` | Small gap / traffic lights |
+| `--space-3` | `12px` | Moderate separation |
+| `--space-4` | `16px` | Container padding & section spacing |
+| `--space-5` | `24px` | Screen body padding |
 
-Typography implementation tokens mirror the scale above: `--type-status`, `--type-body`, `--type-brand`, `--type-detail`, `--type-caption`, and `--type-kicker`.
+- Terminal Frame max width: `780px` (centered floating window).
+- Responsive breakpoint at `768px` and `375px` with fluid text wrapping.
 
-- Content fills the viewport; there is no artificial maximum width.
-- The header spans the viewport and the content uses a single vertical stack.
-- At 375px, 768px, and 1280px the hierarchy and spacing remain unchanged.
-- Chain output owns vertical scrolling inside `#out`; the root page remains document-scrolled.
+## 5. Components & IDs
 
-## 5. Components
-
-### Brand Bar
-
-- **Structure:** `#brand > .mark + strong`.
-- **Variants:** one MGRS-HEN variant.
-- **Spacing:** `--space-2` vertically and `--space-reference-10` horizontally.
-- **States:** static; no hover, focus, active, or disabled behavior.
-- **Accessibility:** the decorative `MH` mark is hidden from assistive technology; the text wordmark remains readable.
-- **Motion:** none.
-- **Layout:** centered inline cluster.
-
-### Status Stack
-
-- **Structure:** `#state`, optional `#det`, and optional `#cache` inside `#wrap`.
-- **Variants:** success, warning, error, and neutral.
-- **States:** class-driven `.ok`, `.warn`, `.bad`; cache success uses `.cacheok`.
-- **Accessibility:** status meaning is repeated in text, never conveyed by color alone.
-- **Motion:** none; state text changes immediately.
-- **Layout:** single vertical stack that reflows naturally.
-
-### Chain Log
-
-- **Structure:** `#out` below `#state`.
-- **Variants:** Lapse and Poops share the same visual primitive.
-- **States:** neutral log lines plus success, warning, and error spans.
-- **Accessibility:** pre-wrapped text, selectable content, status words in every colored line.
-- **Motion:** none; scrolling follows appended output.
-- **Layout:** bordered scroll region sized to the viewport.
-
-### Terminal Frame
-
-- **Structure:** `.terminal-frame > #brand + #wrap + .terminal-footer`.
-- **Variants:** detector shell and chain shell share the same frame; only the interior status/log content differs.
-- **States:** neutral, warning, success, and error are represented by the existing state classes.
-- **Motion:** none; the frame is stable so PS4 input and cache continuation remain predictable.
-- **Accessibility:** header and footer are semantic landmarks; the log remains selectable and scrollable.
-
-## 6. Motion & Interaction
-
-The reference has no decorative motion and MGRS-HEN adds none. Cache completion may wait for a click or keypress because PS4 WebKit requires a user gesture; the status line must explain that action. State changes are instantaneous. `prefers-reduced-motion` therefore needs no override.
-
-## 7. Depth & Surface
-
-Strategy: **terminal frame with tonal shifts, thin borders, and a static scanline texture**.
-
-| Treatment | Value | Usage |
-|---|---|---|
-| Header divider | `1px solid var(--border-default)` | Separates brand bar |
-| Log outline | `1px solid var(--border-default)` | Defines scroll region |
-| Monogram outline | `1px solid var(--border-mark)` | Distinguishes the CSS mark |
-| Radius | `5px` | Terminal frame and log panel |
-| Texture | `repeating-linear-gradient(...)` | Static CRT scanlines, decorative only |
-
-No box shadows, blur, remote images, or animated effects are allowed. The scanline gradient is a single static background texture and must not reduce text contrast.
-
-## 8. Accessibility Constraints & Accepted Debt
-
-### Constraints
-
-- Target WCAG 2.2 AA for the static shell.
-- Keep status wording explicit so color is supplementary.
-- Preserve natural wrapping with no fixed horizontal dimensions.
-- Maintain keyboard activation for the existing cache continuation handler.
-- Do not introduce flashing, auto-playing motion, or remote fonts.
-
-### Accepted Debt
-
-| Item | Location | Why accepted | Owner / Exit |
-|---|---|---|---|
-| Browser-level status is not announced through an ARIA live region | `src/*.html` | The target PS4 WebKit is old and the inspected reference uses plain text status nodes; changing semantics may be evaluated after device compatibility testing | Project owner after physical PS4 QA |
-| Full exploit-state visual QA cannot run on desktop Chrome | `run_lapse.html`, `run_poops.html` | The chain requires PS4-specific WebKit and kernel behavior | Project owner validates on owned PS4 hardware |
+- `#brand`: Terminal window header (`.retro-header`) containing traffic lights and title.
+- `#wrap`: Console screen container (`.retro-screen`).
+- `#state`: Dominant status line (`.status-block`).
+- `#det`: Technical firmware and bug explanation.
+- `#cache`: Application cache state.
+- `#out`: Monospace pre-wrapped stdout stream for exploit chains.

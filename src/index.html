@@ -9,30 +9,47 @@
 </head>
 <body>
 <div class="crt-texture" aria-hidden="true"></div>
-<main class="terminal-frame">
-  <header id="brand" class="terminal-header">
+<main class="retro-terminal">
+  <header id="brand" class="retro-header">
     <div class="traffic-lights" aria-hidden="true">
-      <span class="traffic-light traffic-close"></span>
-      <span class="traffic-light traffic-min"></span>
-      <span class="traffic-light traffic-max"></span>
+      <span class="dot dot-close"></span>
+      <span class="dot dot-min"></span>
+      <span class="dot dot-max"></span>
     </div>
-    <div class="brand-lockup"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
-    <div class="header-mode">PS4 / WEBKIT</div>
+    <div class="retro-title">MGRS-HEN // PS4 EXPLOIT CONSOLE</div>
   </header>
-  <div id="wrap" class="terminal-screen">
-    <div class="terminal-kicker">SELF-HOSTED EXPLOIT CONSOLE <span class="kicker-led" aria-hidden="true"></span></div>
-    <section class="status-block" aria-label="Firmware status">
-      <div class="status-prompt">STATUS //</div>
+  <div id="wrap" class="retro-screen">
+    <div class="boot-logs" aria-hidden="true">
+      <div class="boot-lead">SYSTEM BOOT INITIATED...</div>
+      <div>Loading kernel modules...</div>
+      <div>Initializing hardware...</div>
+      <div>Starting terminal interface...</div>
+    </div>
+    <div class="app-init" aria-hidden="true">
+      <div class="boot-lead">MGRS-HEN CONSOLE</div>
+      <div>Initializing...</div>
+    </div>
+    <pre class="ascii-banner" aria-label="MGRS-HEN Logo">
+███    ███  ██████  ██████  ███████     ██   ██ ███████ ███    ██ 
+████  ████ ██       ██   ██ ██          ██   ██ ██      ████   ██ 
+██ ████ ██ ██   ███ ██████  ███████     ███████ █████   ██ ██  ██ 
+██  ██  ██ ██    ██ ██   ██      ██     ██   ██ ██      ██  ██ ██ 
+██      ██  ██████  ██   ██ ███████     ██   ██ ███████ ██   ████ </pre>
+    <div class="status-block" aria-label="Firmware status">
+      <div class="status-label">STATUS //</div>
       <div id="state">detecting firmware...</div>
-    </section>
-    <div id="det" class="diagnostic-line"></div>
-    <div id="cache" class="cache-line"></div>
-    <div class="terminal-divider" aria-hidden="true"></div>
-    <p class="terminal-note">Firmware routing is automatic. Keep this page open until the cache state is ready.</p>
+      <div id="det" class="diagnostic-line"></div>
+      <div id="cache" class="cache-line"></div>
+    </div>
+    <div class="terminal-note">Firmware routing is automatic. Keep this page open until the cache state is ready.</div>
+    <div class="prompt-row" aria-hidden="true">
+      <span>ps4@mgrs-hen($):</span>
+      <span class="prompt-cursor"></span>
+    </div>
   </div>
-  <footer class="terminal-footer">
-    <span>LOCAL HOST // MGRS-HEN</span>
-    <span>READY FOR PS4 INPUT</span>
+  <footer class="retro-footer">
+    <span>Manual page gcc(1) line 1 (press h for help or q to quit)</span>
+    <span class="footer-jewel" aria-hidden="true"></span>
   </footer>
 </main>
 
