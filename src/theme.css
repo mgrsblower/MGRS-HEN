@@ -540,6 +540,8 @@ html, body {
   scrollbar-width: thin;
   scrollbar-color: var(--mgrs-green-soft) transparent;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .terminal-body::-webkit-scrollbar {
@@ -608,6 +610,41 @@ html, body {
   pointer-events: none;
   width: 0;
   height: 0;
+}
+
+/* ============================================================
+   #OUT EXPLOIT LOG OUTPUT (CRITICAL: PRE-WRAP FOR LINE BREAKS)
+   ============================================================ */
+
+#out {
+  white-space: pre-wrap !important;
+  word-break: break-all;
+  font-family: var(--mgrs-font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mgrs-green);
+  text-shadow: 0 0 6px rgba(56, 255, 156, 0.35);
+  overflow-y: auto;
+  flex: 1;
+  display: block;
+  padding: 10px 0;
+}
+
+#out span.ok {
+  color: #38ff9c !important;
+  font-weight: 700;
+  text-shadow: 0 0 8px #38ff9c, 0 0 16px rgba(56, 255, 156, 0.7);
+}
+
+#out span.warn {
+  color: #ffd166 !important;
+  text-shadow: 0 0 8px rgba(255, 209, 102, 0.6);
+}
+
+#out span.bad {
+  color: #ff4e5b !important;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 78, 91, 0.7);
 }
 
 .terminal-footer {
