@@ -3,23 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MGRS-HEN</title>
+<meta name="description" content="MGRS-HEN offline PS4 WebKit firmware detector and self-hosted exploit console.">
+<title>MGRS-HEN | Firmware detector</title>
 <link rel="stylesheet" href="theme.css">
-<style>
-  #state { font-size:22px; font-weight:700; margin:0 0 6px; }
-  #det { font-size:13px; color:var(--text-secondary); margin:0 0 4px; }
-  #det b { color:var(--text-primary); font-weight:600; }
-  #cache { font-size:12px; color:var(--text-tertiary); margin:0 0 10px; min-height:14px; }
-  #cache.cacheok { color:var(--status-success); }
-</style>
 </head>
 <body>
-<div id="brand"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
-<div id="wrap">
-  <div id="state">detecting firmware...</div>
-  <div id="det"></div>
-  <div id="cache"></div>
-</div>
+<div class="crt-texture" aria-hidden="true"></div>
+<main class="terminal-frame">
+  <header id="brand" class="terminal-header">
+    <div class="traffic-lights" aria-hidden="true">
+      <span class="traffic-light traffic-close"></span>
+      <span class="traffic-light traffic-min"></span>
+      <span class="traffic-light traffic-max"></span>
+    </div>
+    <div class="brand-lockup"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
+    <div class="header-mode">PS4 / WEBKIT</div>
+  </header>
+  <div id="wrap" class="terminal-screen">
+    <div class="terminal-kicker">SELF-HOSTED EXPLOIT CONSOLE <span class="kicker-led" aria-hidden="true"></span></div>
+    <section class="status-block" aria-label="Firmware status">
+      <div class="status-prompt">STATUS //</div>
+      <div id="state">detecting firmware...</div>
+    </section>
+    <div id="det" class="diagnostic-line"></div>
+    <div id="cache" class="cache-line"></div>
+    <div class="terminal-divider" aria-hidden="true"></div>
+    <p class="terminal-note">Firmware routing is automatic. Keep this page open until the cache state is ready.</p>
+  </div>
+  <footer class="terminal-footer">
+    <span>LOCAL HOST // MGRS-HEN</span>
+    <span>READY FOR PS4 INPUT</span>
+  </footer>
+</main>
 
 <script>
 (function () {

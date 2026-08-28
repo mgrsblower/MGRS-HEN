@@ -3,21 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MGRS-HEN - Poops</title>
+<meta name="description" content="MGRS-HEN Poops chain execution console for supported PS4 firmware.">
+<title>MGRS-HEN | Poops chain</title>
 <link rel="stylesheet" href="theme.css">
-<style>
-  #state { font-size:22px; font-weight:700; margin:0 0 10px; }
-  #out { white-space:pre-wrap; font:12px/1.45 Consolas, monospace;
-         background:var(--surface-log); border:1px solid var(--border-default); border-radius:5px;
-         padding:10px 12px; height:calc(100vh - 141px); overflow-y:auto; }
-</style>
 </head>
 <body>
-<div id="brand"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
-<div id="wrap">
-  <div id="state">loading poops chain...</div>
-  <div id="out"></div>
-</div>
+<div class="crt-texture" aria-hidden="true"></div>
+<main class="terminal-frame">
+  <header id="brand" class="terminal-header">
+    <div class="traffic-lights" aria-hidden="true">
+      <span class="traffic-light traffic-close"></span>
+      <span class="traffic-light traffic-min"></span>
+      <span class="traffic-light traffic-max"></span>
+    </div>
+    <div class="brand-lockup"><span class="mark" aria-hidden="true">MH</span><b>MGRS-HEN</b></div>
+    <div class="header-mode">PS4 / WEBKIT</div>
+  </header>
+  <div id="wrap" class="terminal-screen chain-screen">
+    <div class="terminal-kicker">CHAIN EXECUTION / POOPS <span class="kicker-led" aria-hidden="true"></span></div>
+    <section class="status-block" aria-label="Poops status">
+      <div class="status-prompt">STATUS //</div>
+      <div id="state">loading poops chain...</div>
+    </section>
+    <section class="log-shell" aria-label="Poops chain output">
+      <div class="log-header"><span>STDOUT</span><span>LIVE STREAM</span></div>
+      <div id="out"></div>
+    </section>
+  </div>
+  <footer class="terminal-footer">
+    <span>LOCAL HOST // MGRS-HEN</span>
+    <span>POOPS / 12.50 - 13.00</span>
+  </footer>
+</main>
 <script type="module">import "./chain_poops.js";</script>
 </body>
 </html>

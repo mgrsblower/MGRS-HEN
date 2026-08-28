@@ -2,7 +2,7 @@
 
 ## 1. Atmosphere & Identity
 
-MGRS-HEN is a restrained diagnostic console: dark, compact, and explicit about state. Its signature is a small `MH` monogram beside a high-tracking wordmark, followed by one dominant status line and terse technical evidence. The system preserves the inspected RAW GAME layout grammar while removing third-party branding and imagery.
+MGRS-HEN is a retro diagnostic terminal: black-green CRT contrast, a compact framed console, and explicit state language. Its signature is a small `MH` monogram beside a tracked wordmark, traffic-light status markers, a scanline texture, and one dominant state line followed by terse technical evidence. The reference terminal's atmosphere is translated into CSS only so the PS4 host stays offline-safe and the exploit runtime remains isolated.
 
 ## 2. Color
 
@@ -15,12 +15,17 @@ The interface has one dark theme, extracted from the rendered reference at `http
 | Surface/log | `--surface-log` | `#11151b` | Chain output panel |
 | Text/primary | `--text-primary` | `#c8ced8` | Body and primary labels |
 | Text/secondary | `--text-secondary` | `#8b95a3` | Firmware detail |
-| Text/tertiary | `--text-tertiary` | `#5c6672` | Cache progress |
+| Text/tertiary | `--text-tertiary` | `#8b95a3` | Cache progress and quiet labels |
 | Border/default | `--border-default` | `#1e2732` | Header and log outline |
 | Border/mark | `--border-mark` | `#3b4a5d` | Monogram outline |
 | Status/success | `--status-success` | `#7fd0a0` | Success and cached states |
 | Status/warning | `--status-warning` | `#d8c07f` | Waiting and active work |
 | Status/error | `--status-error` | `#d08a7f` | Unsupported and failure states |
+| Terminal/accent | `--terminal-accent` | `#00ff66` | Retro command accent and marker glow |
+| Terminal/accent-dim | `--terminal-accent-dim` | `#00b347` | Texture and quiet borders |
+| Terminal/surface | `--terminal-surface` | `#060907` | Inner terminal panel |
+| Terminal/header | `--terminal-header` | `#0b100d` | Terminal title bar |
+| Terminal/footer | `--terminal-footer` | `#002b11` | Status footer strip |
 
 Only these tokens may supply interface colors. Status colors carry meaning and are not decorative accents.
 
@@ -39,6 +44,7 @@ Only these tokens may supply interface colors. Status colors carry meaning and a
 - Primary: `"Segoe UI", system-ui, sans-serif`.
 - Mono: `Consolas, monospace`.
 - No remote fonts are allowed.
+- Terminal accents use the local mono face; no glow is required for legibility.
 
 ## 4. Spacing & Layout
 
@@ -52,6 +58,10 @@ The working base unit is `4px`, with three reference-fidelity exceptions: `6px`,
 | `--space-reference-10` | `10px` | Header horizontal and cache bottom spacing |
 | `--space-4` | `16px` | Content vertical padding |
 | `--space-reference-18` | `18px` | Content horizontal padding |
+| `--space-terminal-gutter` | `12px` | Narrow-screen terminal gutter |
+| `--space-terminal-frame` | `24px` | Wide-screen terminal gutter |
+
+Typography implementation tokens mirror the scale above: `--type-status`, `--type-body`, `--type-brand`, `--type-detail`, `--type-caption`, and `--type-kicker`.
 
 - Content fills the viewport; there is no artificial maximum width.
 - The header spans the viewport and the content uses a single vertical stack.
@@ -88,22 +98,31 @@ The working base unit is `4px`, with three reference-fidelity exceptions: `6px`,
 - **Motion:** none; scrolling follows appended output.
 - **Layout:** bordered scroll region sized to the viewport.
 
+### Terminal Frame
+
+- **Structure:** `.terminal-frame > #brand + #wrap + .terminal-footer`.
+- **Variants:** detector shell and chain shell share the same frame; only the interior status/log content differs.
+- **States:** neutral, warning, success, and error are represented by the existing state classes.
+- **Motion:** none; the frame is stable so PS4 input and cache continuation remain predictable.
+- **Accessibility:** header and footer are semantic landmarks; the log remains selectable and scrollable.
+
 ## 6. Motion & Interaction
 
 The reference has no decorative motion and MGRS-HEN adds none. Cache completion may wait for a click or keypress because PS4 WebKit requires a user gesture; the status line must explain that action. State changes are instantaneous. `prefers-reduced-motion` therefore needs no override.
 
 ## 7. Depth & Surface
 
-Strategy: **borders-only with tonal shifts**.
+Strategy: **terminal frame with tonal shifts, thin borders, and a static scanline texture**.
 
 | Treatment | Value | Usage |
 |---|---|---|
 | Header divider | `1px solid var(--border-default)` | Separates brand bar |
 | Log outline | `1px solid var(--border-default)` | Defines scroll region |
 | Monogram outline | `1px solid var(--border-mark)` | Distinguishes the CSS mark |
-| Radius | `5px` | Log panel only |
+| Radius | `5px` | Terminal frame and log panel |
+| Texture | `repeating-linear-gradient(...)` | Static CRT scanlines, decorative only |
 
-No shadows, gradients, blur, or ornamental effects are allowed.
+No box shadows, blur, remote images, or animated effects are allowed. The scanline gradient is a single static background texture and must not reduce text contrast.
 
 ## 8. Accessibility Constraints & Accepted Debt
 
