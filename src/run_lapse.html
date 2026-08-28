@@ -4,78 +4,126 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="MGRS-HEN Lapse chain execution console for supported PS4 firmware.">
-<title>MGRS-HEN | Lapse Chain Terminal</title>
+<title>MGRS-HEN // LAPSE EXPLOIT TERMINAL</title>
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
-<!-- CRT Visual Overlays, Hex Dump Memory Background & Film Grain Noise -->
+<!-- Background Matrix Rain Drop Canvas -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- CRT Effects (Identical to Referensi/index.html) -->
 <div class="crt-root" aria-hidden="true">
-  <pre class="crt-hex">0x0A3F12  4F2A 9C1B 0084 7FEA 1290 FF4C B801 3E29  ░▒▓█▄▀▐▌╔╗╚╝
-0x1B8240  89AC 012F 774B EE10 9940 33BC 4501 88FA  アカサタナハマヤ
-0x2C4091  439B 2210 00FA 7780 1209 883A 9920 441B  ║═┼┴┬┤├░▒▓█
-0x3D9102  FA01 339C 8820 119A 448B 9910 223A 77BC  ラワイキシチニヒ
-0x4E1823  0094 883B 2210 994C 33BA 7710 4480 119A  ミリギジヂビピウ
-0x5F2934  8820 449B 110A 773C 9940 22BC 3310 88FA  クスツヌフムユル
-0x6A3845  119A 774B 8820 4410 229B 993C 0084 33BA  グズヅブプ░▒▓█</pre>
   <div class="crt-grid"></div>
   <div class="crt-scanlines"></div>
   <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
-  <div class="crt-noise"></div>
-  <div class="crt-flicker"></div>
+</div>
+
+<!-- 4-Corner HUD -->
+<div class="landing-corner tl">
+  <span class="dot"></span>
+  <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
+</div>
+<div class="landing-corner tr" id="hud-clock">
+  <span>UTC TIME &middot; SYNCING...</span><br>
+  <span>UPLINK &middot; SECURE</span>
+</div>
+<div class="landing-corner bl">
+  <span>v1.0.0 &middot; BUILD 20260210</span>
+</div>
+<div class="landing-corner br">
+  <span>LAT 0.000 &middot; LON 0.000</span><br>
+  <span>CIPHER &middot; AES-256/GCM</span>
 </div>
 
 <main id="wrap" class="terminal-root" style="display: flex;">
   <div class="terminal-window">
-    <header id="brand" class="terminal-header">
-      <div class="title">
-        <span class="dot"></span>
-        <span>&boxdr;&nbsp;MGRS-HEN TERMINAL</span>
+    <header class="terminal-header">
+      <div class="window-dots" aria-hidden="true">
+        <div class="window-dot red"></div>
+        <div class="window-dot yellow"></div>
+        <div class="window-dot green"></div>
+      </div>
+      <div class="title" id="brand">
+        MGRS-HEN // LAPSE EXPLOIT TERMINAL
       </div>
       <div class="meta" aria-hidden="true">
-        <span>TTY &middot; PTS/0</span>
-        <span>ENC &middot; AES-256</span>
+        <span>FW 11.00 - 12.02</span>
         <span id="term-clock">UTC TIME</span>
       </div>
     </header>
 
     <div class="terminal-body">
-      <div class="term-line term-heading">MGRS-HEN SYSTEM // LAPSE EXPLOIT CHAIN</div>
-      <div class="term-line dim">Secure Kernel Payload Injector &middot; FW 11.00 - 12.02</div>
-      <div id="state" class="term-line warn">loading lapse chain...</div>
-      <div class="term-line blank"></div>
+      <div class="term-heading">MGRS-HEN SYSTEM // LAPSE EXPLOIT CHAIN</div>
+      <div class="term-sub">Secure Kernel Payload Injector &middot; FW 11.00 - 12.02</div>
+      <div id="state" class="term-sub" style="color: var(--mgrs-yellow);">loading lapse chain...</div>
 
       <pre id="out" aria-label="Lapse chain output"></pre>
     </div>
 
     <footer class="terminal-footer">
       <div class="left">
-        <span>&bull;&nbsp;ONLINE</span>
-        <span>SESSION &middot; #A7F3</span>
-        <span>USER &middot; ROOT</span>
+        <span>MGRS-HEN Kernel Exploit Loader // Self-Hosted Suite</span>
       </div>
       <div class="right">
-        <span>FW 11.00-12.02</span>
-        <span>MEM &middot; 42%</span>
-        <span>UPLINK &middot; SECURE</span>
+        <span>ONLINE</span>
+        <span>MEM 42%</span>
       </div>
     </footer>
   </div>
 </main>
 
 <script>
-// Terminal Clock
-(function() {
-  var clockEl = document.getElementById("term-clock");
-  if (!clockEl) return;
-  function updateClock() {
+// Live Clocks
+function updateClocks() {
     var now = new Date();
-    clockEl.textContent = now.toISOString().replace("T", " ").slice(0, 19) + " UTC";
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-})();
+    var utcStr = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    var hudClock = document.getElementById('hud-clock');
+    var termClock = document.getElementById('term-clock');
+    if (hudClock) hudClock.innerHTML = '<span>' + utcStr + '</span><br><span>UPLINK &middot; SECURE</span>';
+    if (termClock) termClock.textContent = utcStr;
+}
+updateClocks();
+setInterval(updateClocks, 1000);
+
+// Matrix Background Animation (Identical to Referensi/app.js)
+var canvas = document.getElementById('matrix-canvas');
+if (canvas) {
+    var ctx = canvas.getContext('2d');
+    var width, height, columns, drops;
+    var chars = '0123456789ABCDEF+=-:.*#@+WXZabcdefghijklmnopqrstuvwxyz';
+
+    function initMatrix() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        var fontSize = 14;
+        columns = Math.floor(width / fontSize);
+        drops = Array(columns).fill(1);
+    }
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(5, 8, 5, 0.08)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = '#38ff9c';
+        ctx.font = '12px "JetBrains Mono", monospace';
+
+        for (var i = 0; i < drops.length; i++) {
+            var text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * 14, drops[i] * 14);
+
+            if (drops[i] * 14 > height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    window.addEventListener('resize', initMatrix);
+    initMatrix();
+    setInterval(drawMatrix, 35);
+}
 </script>
 <script type="module">import "./chain_lapse.js";</script>
 </body>

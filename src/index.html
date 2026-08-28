@@ -4,99 +4,152 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="MGRS-HEN offline PS4 WebKit firmware detector and self-hosted exploit console.">
-<title>MGRS-HEN // SYSTEM INTERFACE</title>
+<title>MGRS-HEN // PS4 EXPLOIT CONSOLE</title>
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
-<!-- CRT Visual Overlays, Hex Dump Memory Background & Film Grain Noise -->
+<!-- Background Matrix Rain Drop Canvas -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- CRT Effects (Identical to Referensi/index.html) -->
 <div class="crt-root" aria-hidden="true">
-  <pre class="crt-hex" id="crt-hex-bg">0x0A3F12  4F2A 9C1B 0084 7FEA 1290 FF4C B801 3E29  ░▒▓█▄▀▐▌╔╗╚╝
-0x1B8240  89AC 012F 774B EE10 9940 33BC 4501 88FA  アカサタナハマヤ
-0x2C4091  439B 2210 00FA 7780 1209 883A 9920 441B  ║═┼┴┬┤├░▒▓█
-0x3D9102  FA01 339C 8820 119A 448B 9910 223A 77BC  ラワイキシチニヒ
-0x4E1823  0094 883B 2210 994C 33BA 7710 4480 119A  ミリギジヂビピウ
-0x5F2934  8820 449B 110A 773C 9940 22BC 3310 88FA  クスツヌフムユル
-0x6A3845  119A 774B 8820 4410 229B 993C 0084 33BA  グズヅブプ░▒▓█
-0x7B4956  994C 0084 33BC 8820 119A 448B 7710 223A  ▄▀▐▌╔╗╚╝║═┼┴
-0x8C5067  33BA 9910 229B 110A 883B 774B 4480 0094  アカサタナハマヤ
-0x9D6178  773C 8820 449B 9940 0084 3310 22BC 119A  ラワイキシチニヒ</pre>
   <div class="crt-grid"></div>
   <div class="crt-scanlines"></div>
   <div class="crt-sweep"></div>
   <div class="crt-vignette"></div>
-  <div class="crt-noise"></div>
-  <div class="crt-flicker"></div>
 </div>
 
-<!-- 4-Corner Tactical HUD -->
-<div class="landing-corner tl" aria-hidden="true">
+<!-- 4-Corner HUD (Identical to Referensi/index.html) -->
+<div class="landing-corner tl">
   <span class="dot"></span>
-  NODE // 07-A &middot; SECTOR-&Delta;
+  <span>NODE // 07-A &middot; SECTOR-&Delta;</span>
 </div>
-<div class="landing-corner tr" id="hud-clock" aria-hidden="true">
-  2026-08-28 07:04:48 UTC<br>
-  UPLINK &middot; SECURE
+<div class="landing-corner tr" id="hud-clock">
+  <span>UTC TIME &middot; SYNCING...</span><br>
+  <span>UPLINK &middot; SECURE</span>
 </div>
-<div class="landing-corner bl" aria-hidden="true">
-  V1.0.0 &middot; BUILD 20260210
+<div class="landing-corner bl">
+  <span>v1.0.0 &middot; BUILD 20260210</span>
 </div>
-<div class="landing-corner br" aria-hidden="true">
-  LAT 0.000 &middot; LON 0.000<br>
-  CIPHER &middot; AES-256/<span style="color: #38b8ff">GCM</span>
+<div class="landing-corner br">
+  <span>LAT 0.000 &middot; LON 0.000</span><br>
+  <span>CIPHER &middot; AES-256/GCM</span>
 </div>
 
-<!-- Stage 1: Landing Hero Screen (Matches Hacker UI 1:1) -->
-<main id="wrap" class="landing">
-  <div class="landing-tag" aria-hidden="true">&gt;&nbsp; ENCRYPTED CHANNEL &nbsp;&middot;&nbsp; ACCESS RESTRICTED</div>
-  
-  <h1 id="brand" class="landing-title" data-glitch="[MGRS-HEN]">
-    <span class="brace">[</span>MGRS-HEN<span class="brace">]</span>
-  </h1>
-  
-  <div class="landing-subtitle" aria-hidden="true">
-    <span>SYSTEM INTERFACE</span>
-    <span class="divider">//</span>
-    <span>READY<span class="blink">_</span></span>
-  </div>
+<!-- Paper Retro Terminal CLI Window (Transparent Glass & Lancip) -->
+<main id="wrap" class="retro-container">
+  <div class="retro-window">
+    <div class="retro-header">
+      <div class="window-dots" aria-hidden="true">
+        <div class="window-dot red"></div>
+        <div class="window-dot yellow"></div>
+        <div class="window-dot green"></div>
+      </div>
+      <div class="retro-header-title">
+        MGRS-HEN // PS4 EXPLOIT CONSOLE
+      </div>
+    </div>
 
-  <button id="start-btn" class="landing-cta" aria-label="Start MGRS-HEN System">
-    <span class="bracket">[</span>&gt;&nbsp;START<span class="bracket">]</span>
-  </button>
+    <div class="retro-body">
+      <div class="log-group">
+        <div class="log-heading">SYSTEM BOOT INITIATED...</div>
+        <div class="log-sub">Loading kernel modules...</div>
+        <div class="log-sub">Initializing hardware...</div>
+        <div class="log-sub">Starting terminal interface...</div>
+      </div>
 
-  <div class="landing-status" aria-hidden="true">
-    <span>KERNEL &middot; IDLE</span>
-    <span>NET &middot; 0.8 ms</span>
-    <span>MEM &middot; 42%</span>
-    <span>THREATS &middot; 0</span>
-  </div>
+      <div class="log-group">
+        <div class="log-heading">Exploit Console</div>
+        <div class="log-sub">Initializing...</div>
+      </div>
 
-  <!-- Runtime detector DOM hooks -->
-  <div style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;">
-    <div id="state">detecting firmware...</div>
-    <div id="det"></div>
-    <div id="cache"></div>
+      <div class="ascii-banner" aria-label="MGRS-HEN Banner">
+███    ███  ██████  ██████  ███████     ██   ██ ███████ ███    ██ 
+████  ████ ██       ██   ██ ██          ██   ██ ██      ████   ██ 
+██ ████ ██ ██   ███ ██████  ███████     ███████ █████   ██ ██  ██ 
+██  ██  ██ ██    ██ ██   ██      ██     ██   ██ ██      ██  ██ ██ 
+██      ██  ██████  ██   ██ ███████     ██   ██ ███████ ██   ████ 
+      </div>
+
+      <div class="status-suite">
+        <div>System ready. Firmware auto-detection active.</div>
+        <div class="suite-line">
+          <span>🎮</span>
+          <span>MGRS-HEN Exploit suite ready. Supported FW: 7.00 - 13.00</span>
+        </div>
+        <div id="state">detecting firmware...</div>
+        <div id="det" class="diagnostic-line"></div>
+        <div id="cache" class="cache-line"></div>
+      </div>
+    </div>
+
+    <div class="retro-footer">
+      <div>MGRS-HEN Kernel Exploit Loader // Self-Hosted Offline Suite</div>
+      <div class="diamond" aria-hidden="true"></div>
+    </div>
   </div>
 </main>
 
-<!-- Stage 2: Hacker Transition -->
+<!-- Floating Bottom Badge -->
+<div class="retro-float-badge" aria-hidden="true">
+  <div class="dot"></div>
+  <span>Retro Terminal CLI</span>
+</div>
+
+<!-- Stage 2: Breach Transition View -->
 <div id="transition-view" class="transition-root" aria-hidden="true">
   <div class="transition-logs" id="transition-logs"></div>
 </div>
 
 <script>
-// Tactical HUD Clock
-(function() {
-  var clockEl = document.getElementById("hud-clock");
-  if (!clockEl) return;
-  function updateClock() {
+// Live Clocks
+function updateClocks() {
     var now = new Date();
-    var utc = now.toISOString().replace("T", " ").slice(0, 19) + " UTC";
-    clockEl.innerHTML = utc + "<br>UPLINK &middot; SECURE";
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-})();
+    var utcStr = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    var hudClock = document.getElementById('hud-clock');
+    if (hudClock) hudClock.innerHTML = '<span>' + utcStr + '</span><br><span>UPLINK &middot; SECURE</span>';
+}
+updateClocks();
+setInterval(updateClocks, 1000);
+
+// Matrix Background Animation (Identical to Referensi/app.js)
+var canvas = document.getElementById('matrix-canvas');
+if (canvas) {
+    var ctx = canvas.getContext('2d');
+    var width, height, columns, drops;
+    var chars = '0123456789ABCDEF+=-:.*#@+WXZabcdefghijklmnopqrstuvwxyz';
+
+    function initMatrix() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        var fontSize = 14;
+        columns = Math.floor(width / fontSize);
+        drops = Array(columns).fill(1);
+    }
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(5, 8, 5, 0.08)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = '#38ff9c';
+        ctx.font = '12px "JetBrains Mono", monospace';
+
+        for (var i = 0; i < drops.length; i++) {
+            var text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * 14, drops[i] * 14);
+
+            if (drops[i] * 14 > height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    window.addEventListener('resize', initMatrix);
+    initMatrix();
+    setInterval(drawMatrix, 35);
+}
 </script>
 
 <script>
@@ -104,7 +157,6 @@
     var stateEl = document.getElementById("state");
     var detEl = document.getElementById("det");
     var cacheEl = document.getElementById("cache");
-    var startBtn = document.getElementById("start-btn");
     var wrapEl = document.getElementById("wrap");
     var transitionView = document.getElementById("transition-view");
     var transitionLogs = document.getElementById("transition-logs");
@@ -160,7 +212,6 @@
         if (wrapEl) {
             wrapEl.style.opacity = "0";
             wrapEl.style.filter = "blur(8px)";
-            wrapEl.style.transition = "opacity 0.4s ease, filter 0.4s ease";
         }
         if (transitionView && transitionLogs) {
             transitionView.style.display = "flex";
@@ -191,33 +242,28 @@
         function fire() {
             window.removeEventListener("click", fire);
             window.removeEventListener("keydown", fire);
-            if (startBtn) startBtn.removeEventListener("click", fire);
             action();
         }
         window.addEventListener("click", fire);
         window.addEventListener("keydown", fire);
-        if (startBtn) startBtn.addEventListener("click", fire);
-    }
-
-    if (startBtn) {
-        startBtn.addEventListener("click", function () {
-            go();
-        });
     }
 
     var ac = window.applicationCache;
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        setState("SYSTEM READY -- PRESS START", "ok");
+        setState("launching exploit suite...", "ok");
+        setTimeout(go, 600);
     } else if (!navigator.onLine) {
         setCache("offline -- from cache", true);
-        setState("SYSTEM READY -- PRESS START", "ok");
+        setState("launching exploit suite...", "ok");
+        setTimeout(go, 600);
     } else if (ac.status === ac.IDLE) {
         setCache("cached", true);
-        setState("SYSTEM READY -- PRESS START", "ok");
+        setState("launching exploit suite...", "ok");
+        setTimeout(go, 600);
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("update downloaded", true);
-        waitForTap("UPDATE READY -- PRESS START OR X TO RELOAD",
+        waitForTap("UPDATE READY -- PRESS X TO RELOAD",
                    function () { location.reload(); });
     } else {
         setCache("checking cache...");
@@ -230,26 +276,27 @@
 
         ac.addEventListener("cached", function () {
             setCache("cached for offline use", true);
-            waitForTap("CACHED (first run) -- PRESS START OR X TO RUN", go);
+            waitForTap("CACHED (first run) -- PRESS X TO RUN", go);
         }, false);
         ac.addEventListener("updateready", function () {
             try { ac.swapCache(); } catch (e) {}
             setCache("update downloaded", true);
-            waitForTap("UPDATE READY -- PRESS START OR X TO RELOAD",
+            waitForTap("UPDATE READY -- PRESS X TO RELOAD",
                        function () { location.reload(); });
         }, false);
 
         ac.addEventListener("noupdate", function () {
             setCache("cached -- offline ready", true);
-            setState("SYSTEM READY -- PRESS START", "ok");
+            setState("launching exploit suite...", "ok");
+            setTimeout(go, 600);
         }, false);
         ac.addEventListener("error", function () {
             setCache("cache unavailable");
-            waitForTap("CACHE FAILED -- PRESS START OR X TO RUN ANYWAY", go);
+            waitForTap("CACHE FAILED -- PRESS X TO RUN ANYWAY", go);
         }, false);
         ac.addEventListener("obsolete", function () {
             setCache("cache obsolete");
-            waitForTap("CACHE OBSOLETE -- PRESS START OR X TO RUN", go);
+            waitForTap("CACHE OBSOLETE -- PRESS X TO RUN", go);
         }, false);
     }
 })();
